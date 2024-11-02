@@ -1,0 +1,27 @@
+
+.contact-info {
+    background-color: #475163; /* Fondo suave */
+    border-radius: 10px; /* Bordes redondeados */
+    
+    box-shadow: 0 4px 10px rgba(75, 4, 4, 0.1); /* Sombra para profundidad */
+    margin-top: 20px; /* Margen superior */
+    transition: transform 0.2s; /* Transición suave */
+}
+
+.contact-info:hover {
+    transform: translateY(-5px); /* Efecto de elevación al pasar el mouse */
+}
+
+.contact-info p {
+   
+    font-size: 16px; /* Tamaño de fuente */
+}
+
+.contact-info a {
+    color: #afbccb; /* Color del enlace */
+    text-decoration: none; /* Sin subrayado */
+}
+
+.contact-info a:hover {
+    text-decoration: underline; /* Subrayado al pasar el mouse */
+}
