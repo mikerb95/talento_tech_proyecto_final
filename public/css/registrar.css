@@ -1,0 +1,50 @@
+/* reset de CSS inicio - eliminas las características predeterminadas sobre navegadores */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+/* reset de CSS fin */
+/* inicio de estilos sección index.html */
+
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+/* fin de estilos  index.html*/
+
+/* sección inicio */
+
+.registro{
+  background-color: #fdfdfd;
+  margin: auto;
+  width: 350px;
+  text-align: center;
+  padding: 30px;
+  border-radius: 5px;
+  box-shadow: 5px 5px 0 #cccccc6b;
+  border: solid 1px #cccccc;
+}
+
+/* seccion de p inicio  */
+
+h4{
+  font-weight: bold;
+}
+
+/* seccion de label*/
+.mb-3 label{ 
+    font-size: 15px;
+    margin-bottom: 2px;
+}
+
+/* seccion de input*/
+.mb-3 input{ 
+    height: 25px;
+}
+
+/* seccion boton */
+
+button{
+  margin-bottom: 10px;
+}
