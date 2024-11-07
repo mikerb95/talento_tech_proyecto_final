@@ -25,18 +25,64 @@ db.connect(err => {
     console.log('Conectado a la base de datos MySQL');
 });
 
-// Crear la tabla 'libros' si no existe
+// Crear la tabla 'calificaciones' si no existe
 db.query(`
-    CREATE TABLE IF NOT EXISTS libros (
+    CREATE TABLE IF NOT EXISTS  (
         id INT AUTO_INCREMENT PRIMARY KEY,
-        Titulo VARCHAR(255) NOT NULL,
-        Autor VARCHAR(255) NOT NULL,
-        Editorial VARCHAR(255) NOT NULL,
-        Año INT NOT NULL
+        id_Usuario int(11) NOT NULL,
+        id_curso int(11) NOT NULL,
+        Califiacion int(11) NOT NULL,
+        Detalles varchar(255) NOT NULL,
+        Fecha date NOT NULL
     )
 `, err => {
     if (err) throw err;
-    console.log("Tabla 'Libros' creada o verificada");
+    console.log("Tabla 'calificaciones' creada o verificada");
+});
+
+// Crear la tabla 'cursos' si no existe
+db.query(`
+    CREATE TABLE cursos (
+        id int(11) NOT NULL,
+        Nombre_curso varchar(255) NOT NULL,
+        URL_curso varchar(255) NOT NULL,
+        Duracion varchar(255) NOT NULL,
+        Precio varchar(255) NOT NULL,
+        Institucion varchar(255) NOT NULL
+    )
+`, err => {
+    if (err) throw err;
+    console.log("Tabla 'cursos' creada o verificada");
+});
+
+// Crear la tabla 'roles' si no existe
+db.query(`
+        CREATE TABLE roles (
+        id int(11) NOT NULL,
+        rol varchar(255) NOT NULL
+        
+    )
+`, err => {
+    if (err) throw err;
+    console.log("Tabla 'roles' creada o verificada");
+});
+
+
+// Crear la tabla 'usuarios' si no existe
+db.query(`
+        CREATE TABLE usuarios (
+        id int(11) NOT NULL,
+        nombres varchar(255) NOT NULL,
+        apellidos varchar(255) NOT NULL,
+        email varchar(255) NOT NULL,
+        telefono int(11) NOT NULL,
+        nickname varchar(255) NOT NULL,
+        fecha_creacion datetime NOT NULL,
+        rol = id tabla roles int(11) NOT NULL
+    )
+`, err => {
+    if (err) throw err;
+    console.log("Tabla 'usuarios' creada o verificada");
 });
 
 // Rutas para manejar la información de los cursos
