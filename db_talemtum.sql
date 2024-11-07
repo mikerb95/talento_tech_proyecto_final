@@ -44,7 +44,7 @@ CREATE TABLE `calificacion` (
 
 CREATE TABLE `cursos` (
   `id` int(11) NOT NULL,
-  `nombre_curso` varchar(255) NOT NULL,
+  `Nombre_curso` varchar(255) NOT NULL,
   `URL_curso` varchar(255) NOT NULL,
   `Duracion` varchar(255) NOT NULL,
   `Valor $` int(11) NOT NULL,
