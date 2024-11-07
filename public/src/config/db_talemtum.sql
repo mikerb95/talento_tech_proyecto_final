@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 02-11-2024 a las 19:09:50
+-- Tiempo de generación: 07-11-2024 a las 01:05:28
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.0.30
 
@@ -24,15 +24,15 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `calificacion`
+-- Estructura de tabla para la tabla `calificaciones`
 --
 
-CREATE TABLE `calificacion` (
+CREATE TABLE `calificaciones` (
   `id` int(11) NOT NULL,
   `id_Usuario` int(11) NOT NULL,
   `id_curso` int(11) NOT NULL,
   `Califiacion` int(11) NOT NULL,
-  `Detelles` varchar(255) NOT NULL,
+  `Detalles` varchar(255) NOT NULL,
   `Fecha` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
@@ -47,8 +47,19 @@ CREATE TABLE `cursos` (
   `nombre_curso` varchar(255) NOT NULL,
   `URL_curso` varchar(255) NOT NULL,
   `Duracion` varchar(255) NOT NULL,
-  `Valor $` int(11) NOT NULL,
+  `Precio` varchar(255) NOT NULL,
   `Institucion` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `roles`
+--
+
+CREATE TABLE `roles` (
+  `id` int(11) NOT NULL,
+  `rol` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
@@ -59,30 +70,23 @@ CREATE TABLE `cursos` (
 
 CREATE TABLE `usuarios` (
   `id` int(11) NOT NULL,
-  `nombre` varchar(100) NOT NULL,
-  `Apellidos` varchar(255) NOT NULL,
-  `email` varchar(100) NOT NULL,
+  `nombres` varchar(255) NOT NULL,
+  `apellidos` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
   `telefono` int(11) NOT NULL,
-  `Nickname` varchar(255) NOT NULL,
-  `contraseña` varchar(255) NOT NULL,
-  `fecha_registro` timestamp NOT NULL DEFAULT current_timestamp()
+  `nickname` varchar(255) NOT NULL,
+  `fecha_creacion` datetime NOT NULL,
+  `rol = id tabla roles` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
-
---
--- Volcado de datos para la tabla `usuarios`
---
-
-INSERT INTO `usuarios` (`id`, `nombre`, `Apellidos`, `email`, `telefono`, `Nickname`, `contraseña`, `fecha_registro`) VALUES
-(1, 'Andres', '', 'andresbayona852@gmail.com', 0, '', '12345678lol', '2024-11-02 03:48:57');
 
 --
 -- Índices para tablas volcadas
 --
 
 --
--- Indices de la tabla `calificacion`
+-- Indices de la tabla `calificaciones`
 --
-ALTER TABLE `calificacion`
+ALTER TABLE `calificaciones`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -92,20 +96,25 @@ ALTER TABLE `cursos`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indices de la tabla `roles`
+--
+ALTER TABLE `roles`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `email` (`email`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
 --
 
 --
--- AUTO_INCREMENT de la tabla `calificacion`
+-- AUTO_INCREMENT de la tabla `calificaciones`
 --
-ALTER TABLE `calificacion`
+ALTER TABLE `calificaciones`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -115,10 +124,16 @@ ALTER TABLE `cursos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT de la tabla `roles`
+--
+ALTER TABLE `roles`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
