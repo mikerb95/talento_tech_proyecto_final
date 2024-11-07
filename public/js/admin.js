@@ -1,13 +1,6 @@
 const express = require('express');
 const mysql = require('mysql2');
  
-// Datos de conexión a la base de datos
-const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'base_de_datos'
-});
 // Conexión a la base de datos de conexion
 const conexion = require('./conexion');
 
