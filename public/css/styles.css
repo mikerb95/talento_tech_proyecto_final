@@ -1,0 +1,19 @@
+/* reset de CSS inicio - eliminas las características predeterminadas sobre navegadores */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+/* reset de CSS fin */
+/* sección inicio */
+
+.inicio{
+  width: 20px;
+}
+
+h1{
+  font-size: 50px;
+  text-align: center;
+  padding: 20px;
+  background-color: #000000;
+}

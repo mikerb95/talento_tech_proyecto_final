@@ -1,20 +1,23 @@
+//referenciamos mysql
 const mysql = require('mysql2');
 
 // Datos de conexión a la base de datos
-const connection = mysql.createConnection({
+const conexion = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: '',
     database: 'base_de_datos'
 });
 
-// Verificar conexión
-connection.connect(err => {
-    if (err) {
-        console.error('Conexión fallida: ' + err.stack);
+//conectamos con la base de datos
+
+conexion.connect((error)=> {
+    if(error) {
+        console.error('Error al conectar con la base de datos:', error);
         return;
     }
-    console.log('Conectado a la base de datos MySQL como id ' + connection.threadId);
+    console.log('Conectado a la base de datos');
 });
 
-module.exports = connection;
+//exportamos la conexión para utilizarla en otros archivos
+module.exports = conexion;
