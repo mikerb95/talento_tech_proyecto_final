@@ -8,14 +8,8 @@ const db = mysql.createConnection({
     password: '',
     database: 'base_de_datos'
 });
-// Conexión a la base de datos
-db.connect(err => {
-    if (err) {
-        console.error('Error conectando a la base de datos:', err.stack);
-        return;
-    }
-    console.log('Conectado a la base de datos MySQL');
-});
+// Conexión a la base de datos de conexion
+const conexion = require('./conexion');
 
 //Crear la tabla'Cursos' si no existe
 db.query(`
