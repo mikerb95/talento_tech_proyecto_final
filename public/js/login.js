@@ -1,73 +1,63 @@
 const express = require('express');
 const mysql = require('mysql2');
-const bcrypt = require('bcrypt');
-const session = require('express-session');
+const conexion = require('./conexion');
 
-const connection = require('./conexion');
+// Crea un router para manejar las rutas de autenticación
+const router = express.Router();
 
-// Ahora puedes usar 'connection' para realizar consultas a la base de datos
-
-
-const app = express();
-const PORT = 3000;
-
-
-
-// Conexión a la base de datos
-const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'base_de_datos'
+// Crear la tabla 'roles' si no existe
+conexion.query(`
+    CREATE TABLE IF NOT EXISTS roles (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        rol VARCHAR(10) NOT NULL,
+    )
+`, err => {
+    if (err) throw err;
+    console.log("Tabla 'roles' creada o verificada");
 });
 
-db.connect(err => {
-    if (err) {
-        console.error('Error conectando a la base de datos:', err.stack);
-        return;
-    }
-    console.log('Conectado a la base de datos MySQL');
+// Crear la tabla 'usuarios' si no existe
+conexion.query(`
+    CREATE TABLE IF NOT EXISTS roles (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        nombre VARCHAR(100) NOT NULL,
+        apellido VARCHAR(100) NOT NULL,
+        telefono VARCHAR(10) NOT NULL,
+        email VARCHAR(100) UNIQUE NOT NULL,
+        contraseña VARCHAR(255) NOT NULL,
+        rol_id INT,
+        FOREIGN KEY (rol_id) REFERENCES roles(id)
+    )
+`, err => {
+    if (err) throw err;
+    console.log("Tabla 'usuarios' creada o verificada");
 });
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// Configuración de la sesión
-app.use(session({
-    secret: 'tu_secreto_de_sesion',
-    resave: false,
-    saveUninitialized: true
-}));
-
-// Ruta para el inicio de sesión
-app.post('/login', async (req, res) => {
-    const { email, password } = req.body;
-
-    const sql = 'SELECT id, contraseña FROM usuarios WHERE email = ?';
-    db.query(sql, [email], (err, results) => {
-        if (err) {
-            res.status(500).send('Error al conectar a la base de datos');
+// Ruta de autenticación
+router.post('/login', (req, res) => {
+    const { email, contraseña } = req.body;
+    const query = 'SELECT * FROM user WHERE email = ? AND contraseña = ?';
+    conexion.query(query, [email, contraseña], (error, results) => {
+        if (error) {
+            console.error('Error en la consulta:', error);
+            res.status(500).send('Error interno en el servidor');
             return;
         }
-
         if (results.length > 0) {
-            const { id, contraseña: hashedPassword } = results[0];
-            
-            bcrypt.compare(password, hashedPassword, (err, result) => {
-                if (result) {
-                    req.session.userId = id;
-                    res.redirect('/inicio.html'); // Redirección a la página de inicio
-                } else {
-                    res.status(401).send('Contraseña incorrecta');
-                }
-            });
+            const user = results[0];
+            const rol = user.rol;
+
+            if (rol === 'admin') {
+                res.redirect('/admin/dashboard');
+            } else if (rol === 'user') {
+                res.redirect('/user/dashboard');
+            } else {
+                res.status(403).send('Rol no autorizado');
+            }
         } else {
-            res.status(404).send('No se encontró el usuario con ese correo electrónico');
+            res.status(401).send('Credenciales incorrectas');
         }
     });
 });
 
-// Iniciar el servidor
-app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}`);
-});
+// Exporta el router para usarlo en servidor.js
+module.exports = router;
