@@ -20,7 +20,7 @@ body {
   margin: auto;
   width: 350px;
   text-align: center;
-  padding: 30px;
+  padding: 25px;
   border-radius: 5px;
   box-shadow: 5px 5px 0 #cccccc6b;
   border: solid 1px #cccccc;
@@ -36,11 +36,13 @@ h4{
 .mb-3 label{ 
     font-size: 15px;
     margin-bottom: 2px;
+    font-weight: bold;
 }
 
 /* seccion de input*/
 .mb-3 input{ 
-    height: 25px;
+    font-size: 15px;
+    height: 34px;
 }
 
 /* seccion boton */
