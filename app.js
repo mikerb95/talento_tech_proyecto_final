@@ -78,7 +78,7 @@ db.query(`
         email VARCHAR(255) NOT NULL,
         telefono INT NOT NULL,
         nickname VARCHAR(255) NOT NULL,
-        fecha_creacion DATETIME NOT NULL,
+        fecha_creacion DATE NOT NULL,
         rol_id INT NOT NULL
     )
 `, err => {
@@ -154,28 +154,28 @@ app.get('/calificaciones', (req, res) => {
 
 // Agregar un nuevo calificaciones
 app.post('/calificaciones', (req, res) => {
-    const { id_Usuario, id_curso, Califiacion, Detalles, Fecha } = req.body;
-    const sql = 'INSERT INTO calificaciones (id_Usuario, id_curso, Califiacion, Detalles, Fecha) VALUES (?, ?, ?, ?, ?)';
-    db.query(sql, [id_Usuario, id_curso, Califiacion, Detalles, Fecha], (err, result) => {
+    const { id_Usuario, id_curso, Calificacion, Detalles, Fecha } = req.body;
+    const sql = 'INSERT INTO calificaciones (id_Usuario, id_curso, Calificacion, Detalles, Fecha) VALUES (?, ?, ?, ?, ?)';
+    db.query(sql, [id_Usuario, id_curso, Calificacion, Detalles, Fecha], (err, result) => {
         if (err) {
             res.status(500).send('Error agregando el calificaciones');
             return;
         }
-        res.status(201).json({ id: result.insertId, id_Usuario, id_curso, Califiacion, Detalles, Fecha  });
+        res.status(201).json({ id: result.insertId, id_Usuario, id_curso, Calificacion, Detalles, Fecha  });
     });
 });
 
 // Actualizar un calificaciones
 app.put('/calificaciones/:id', (req, res) => {
-    const { id_Usuario, id_curso, Califiacion, Detalles, Fecha } = req.body;
+    const { id_Usuario, id_curso, Calificacion, Detalles, Fecha } = req.body;
     const { id } = req.params;
-    const sql = 'UPDATE calificaciones SET id_Usuario = ?, id_curso = ?, Califiacion = ?, Detalles = ?, Fecha = ? WHERE id = ?';
-    db.query(sql, [id_Usuario, id_curso, Califiacion, Detalles, Fecha , id], (err, result) => {
+    const sql = 'UPDATE calificaciones SET id_Usuario = ?, id_curso = ?, Calificacion = ?, Detalles = ?, Fecha = ? WHERE id = ?';
+    db.query(sql, [id_Usuario, id_curso, Calificacion, Detalles, Fecha , id], (err, result) => {
         if (err) {
             res.status(500).send('Error actualizando el calificaciones');
             return;
         }
-        res.json({ id_Usuario, id_curso, Califiacion, Detalles, Fecha });
+        res.json({ id_Usuario, id_curso, Calificacion, Detalles, Fecha });
     });
 });
 
@@ -205,28 +205,28 @@ app.get('/roles', (req, res) => {
 
 // Agregar un nuevo roles
 app.post('/roles', (req, res) => {
-    const { id_Usuario, id_curso, Califiacion, Detalles, Fecha } = req.body;
-    const sql = 'INSERT INTO roles (id_Usuario, id_curso, Califiacion, Detalles, Fecha) VALUES (?, ?, ?, ?, ?)';
-    db.query(sql, [id_Usuario, id_curso, Califiacion, Detalles, Fecha], (err, result) => {
+    const { rol } = req.body;
+    const sql = 'INSERT INTO roles (rol) VALUES (?)';
+    db.query(sql, [rol], (err, result) => {
         if (err) {
             res.status(500).send('Error agregando el roles');
             return;
         }
-        res.status(201).json({ id: result.insertId, id_Usuario, id_curso, Califiacion, Detalles, Fecha  });
+        res.status(201).json({ id: result.insertId, rol });
     });
 });
 
 // Actualizar un roles
 app.put('/roles/:id', (req, res) => {
-    const { id_Usuario, id_curso, Califiacion, Detalles, Fecha } = req.body;
+    const { rol } = req.body;
     const { id } = req.params;
-    const sql = 'UPDATE roles SET id_Usuario = ?, id_curso = ?, Califiacion = ?, Detalles = ?, Fecha = ? WHERE id = ?';
-    db.query(sql, [id_Usuario, id_curso, Califiacion, Detalles, Fecha , id], (err, result) => {
+    const sql = 'UPDATE roles SET rol = ? WHERE id = ?';
+    db.query(sql, [rol , id], (err, result) => {
         if (err) {
             res.status(500).send('Error actualizando el roles');
             return;
         }
-        res.json({ id_Usuario, id_curso, Califiacion, Detalles, Fecha });
+        res.json({ rol });
     });
 });
 
@@ -240,6 +240,58 @@ app.delete('/roles/:id', (req, res) => {
             return;
         }
         res.send('roles eliminado');
+    });
+});
+
+
+// Obtener todos los usuarios
+app.get('/usuarios', (req, res) => {
+    db.query('SELECT * FROM usuarios', (err, results) => {
+        if (err) {
+            res.status(500).send('Error obteniendo los usuarios');
+            return;
+        }
+        res.json(results);
+    });
+});
+
+// Agregar un nuevo usuarios
+app.post('/usuarios', (req, res) => {
+    const { nombres, apellidos, email, telefono, nickname, fecha_creacion, rol_id} = req.body;
+    const sql = 'INSERT INTO usuarios (nombres, apellidos, email, telefono, nickname, fecha_creacion, rol_id) VALUES (?, ?, ?, ?, ?, ?, ?)';
+    db.query(sql, [nombres, apellidos, email, telefono, nickname, fecha_creacion, rol_id], (err, result) => {
+        if (err) {
+            res.status(500).send('Error agregando el usuarios');
+            return;
+        }
+        res.status(201).json({ id: result.insertId, nombres, apellidos, email, telefono, nickname, fecha_creacion, rol_id });
+    });
+});
+
+// Actualizar un usuarios
+app.put('/usuarios/:id', (req, res) => {
+    const { nombres, apellidos, email, telefono, nickname, fecha_creacion, rol_id } = req.body;
+    const { id } = req.params;
+    const sql = 'UPDATE usuarios SET nombres = ?, apellidos = ?, email = ?, telefono = ?, nickname = ?, fecha_creacion = ?, rol_id = ? WHERE id = ?';
+    db.query(sql, [nombres, apellidos, email, telefono, nickname, fecha_creacion, rol_id , id], (err, result) => {
+        if (err) {
+            res.status(500).send('Error actualizando el usuarios');
+            return;
+        }
+        res.json({ nombres, apellidos, email, telefono, nickname, fecha_creacion, rol_id });
+    });
+});
+
+// Eliminar un usuarios
+app.delete('/usuarios/:id', (req, res) => {
+    const { id } = req.params;
+    const sql = 'DELETE FROM usuarios WHERE id = ?';
+    db.query(sql, [id], (err, result) => {
+        if (err) {
+            res.status(500).send('Error eliminando el usuarios');
+            return;
+        }
+        res.send('usuarios eliminado');
     });
 });
 

@@ -76,7 +76,7 @@ CREATE TABLE IF NOT EXISTS calificaciones (
         email VARCHAR(255) NOT NULL,
         telefono INT NOT NULL,
         nickname VARCHAR(255) NOT NULL,
-        fecha_creacion DATETIME NOT NULL,
+        fecha_creacion DATE NOT NULL,
         rol_id INT NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
