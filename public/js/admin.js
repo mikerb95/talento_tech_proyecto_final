@@ -6,7 +6,7 @@ const conexion = require('./conexion');
 
 //Crear la tabla'Cursos' si no existe
 db.query(`
-    CREATE TABLE cursos (
+    CREATE TABLE IF NOT EXISTS cursos (
         id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
         Nombre_curso VARCHAR(255) NOT NULL,
         URL_curso VARCHAR(255) NOT NULL,
