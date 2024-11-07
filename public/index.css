@@ -1,0 +1,15 @@
+/* reset de CSS inicio - eliminas las características predeterminadas sobre navegadores */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+/* reset de CSS fin */
+/* inicio de estilos sección index.html */
+
+body {
+    background-color: #f2f2f2;
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+/* fin de estilos  index.html*/
