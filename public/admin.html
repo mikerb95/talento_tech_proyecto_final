@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Gestión de Biblioteca</h1>
+
+        <div class="form-container">
+            <h2>Agregar Libro</h2>
+            <form id="formularioLibro">
+                <input type="text" id="Titulo" placeholder="Título" required>
+                <input type="text" id="Autor" placeholder="Autor" required>
+                <input type="text" id="Editorial" placeholder="Editorial" required>
+                <input type="number" id="Año" placeholder="Año" required>
+                <button type="submit">Agregar Libro</button>
+            </form>
+        </div>
+
+        <h2>Lista de Libros</h2>
+        <div id="listaLibros" class="table-container">
+            <table class="book-table">
+                <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Autor</th>
+                        <th>Editorial</th>
+                        <th>Año</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="librosTbody">
+                    <!-- Aquí se insertarán los libros con JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
