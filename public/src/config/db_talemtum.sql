@@ -27,13 +27,14 @@ SET time_zone = "+00:00";
 -- Estructura de tabla para la tabla `calificaciones`
 --
 
-CREATE TABLE `calificaciones` (
-  `id` int(11) NOT NULL,
-  `id_Usuario` int(11) NOT NULL,
-  `id_curso` int(11) NOT NULL,
-  `Califiacion` int(11) NOT NULL,
-  `Detalles` varchar(255) NOT NULL,
-  `Fecha` date NOT NULL
+CREATE TABLE IF NOT EXISTS calificaciones (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        id_Usuario INT NOT NULL,
+        id_curso INT NOT NULL,
+        Calificacion INT NOT NULL,
+        Detalles VARCHAR(255) NOT NULL,
+        Fecha DATE NOT NULL
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
@@ -42,13 +43,13 @@ CREATE TABLE `calificaciones` (
 -- Estructura de tabla para la tabla `cursos`
 --
 
-CREATE TABLE `cursos` (
-  `id` int(11) NOT NULL,
-  `Nombre_curso` varchar(255) NOT NULL,
-  `URL_curso` varchar(255) NOT NULL,
-  `Duracion` varchar(255) NOT NULL,
-  `Precio` varchar(255) NOT NULL,
-  `Institucion` varchar(255) NOT NULL
+    CREATE TABLE IF NOT EXISTS cursos (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        Nombre_curso VARCHAR(255) NOT NULL,
+        URL_curso VARCHAR(255) NOT NULL,
+        Duracion VARCHAR(255) NOT NULL,
+        Precio VARCHAR(255) NOT NULL,
+        Institucion VARCHAR(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
@@ -57,9 +58,9 @@ CREATE TABLE `cursos` (
 -- Estructura de tabla para la tabla `roles`
 --
 
-CREATE TABLE `roles` (
-  `id` int(11) NOT NULL,
-  `rol` varchar(255) NOT NULL
+    CREATE TABLE IF NOT EXISTS roles (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        rol VARCHAR(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
@@ -68,15 +69,15 @@ CREATE TABLE `roles` (
 -- Estructura de tabla para la tabla `usuarios`
 --
 
-CREATE TABLE `usuarios` (
-  `id` int(11) NOT NULL,
-  `nombres` varchar(255) NOT NULL,
-  `apellidos` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `telefono` int(11) NOT NULL,
-  `nickname` varchar(255) NOT NULL,
-  `fecha_creacion` datetime NOT NULL,
-  `rol = id tabla roles` int(11) NOT NULL
+    CREATE TABLE IF NOT EXISTS usuarios (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        nombres VARCHAR(255) NOT NULL,
+        apellidos VARCHAR(255) NOT NULL,
+        email VARCHAR(255) NOT NULL,
+        telefono INT NOT NULL,
+        nickname VARCHAR(255) NOT NULL,
+        fecha_creacion DATETIME NOT NULL,
+        rol_id INT NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --

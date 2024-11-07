@@ -25,42 +25,43 @@ db.connect(err => {
     console.log('Conectado a la base de datos MySQL');
 });
 
-// Crear la tabla 'calificaciones' si no existe
-db.query(`
-    CREATE TABLE IF NOT EXISTS  (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        id_Usuario int(11) NOT NULL,
-        id_curso int(11) NOT NULL,
-        Califiacion int(11) NOT NULL,
-        Detalles varchar(255) NOT NULL,
-        Fecha date NOT NULL
-    )
-`, err => {
-    if (err) throw err;
-    console.log("Tabla 'calificaciones' creada o verificada");
-});
-
 // Crear la tabla 'cursos' si no existe
 db.query(`
-    CREATE TABLE cursos (
-        id int(11) NOT NULL,
-        Nombre_curso varchar(255) NOT NULL,
-        URL_curso varchar(255) NOT NULL,
-        Duracion varchar(255) NOT NULL,
-        Precio varchar(255) NOT NULL,
-        Institucion varchar(255) NOT NULL
+    CREATE TABLE IF NOT EXISTS cursos (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        Nombre_curso VARCHAR(255) NOT NULL,
+        URL_curso VARCHAR(255) NOT NULL,
+        Duracion VARCHAR(255) NOT NULL,
+        Precio VARCHAR(255) NOT NULL,
+        Institucion VARCHAR(255) NOT NULL
     )
 `, err => {
     if (err) throw err;
     console.log("Tabla 'cursos' creada o verificada");
 });
 
+
+// Crear la tabla 'calificaciones' si no existe
+db.query(`
+    CREATE TABLE IF NOT EXISTS calificaciones (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        id_Usuario INT NOT NULL,
+        id_curso INT NOT NULL,
+        Calificacion INT NOT NULL,
+        Detalles VARCHAR(255) NOT NULL,
+        Fecha DATE NOT NULL
+    )
+`, err => {
+    if (err) throw err;
+    console.log("Tabla 'calificaciones' creada o verificada");
+});
+
+
 // Crear la tabla 'roles' si no existe
 db.query(`
-        CREATE TABLE roles (
-        id int(11) NOT NULL,
-        rol varchar(255) NOT NULL
-        
+    CREATE TABLE IF NOT EXISTS roles (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        rol VARCHAR(255) NOT NULL
     )
 `, err => {
     if (err) throw err;
@@ -70,15 +71,15 @@ db.query(`
 
 // Crear la tabla 'usuarios' si no existe
 db.query(`
-        CREATE TABLE usuarios (
-        id int(11) NOT NULL,
-        nombres varchar(255) NOT NULL,
-        apellidos varchar(255) NOT NULL,
-        email varchar(255) NOT NULL,
-        telefono int(11) NOT NULL,
-        nickname varchar(255) NOT NULL,
-        fecha_creacion datetime NOT NULL,
-        rol = id tabla roles int(11) NOT NULL
+    CREATE TABLE IF NOT EXISTS usuarios (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        nombres VARCHAR(255) NOT NULL,
+        apellidos VARCHAR(255) NOT NULL,
+        email VARCHAR(255) NOT NULL,
+        telefono INT NOT NULL,
+        nickname VARCHAR(255) NOT NULL,
+        fecha_creacion DATETIME NOT NULL,
+        rol_id INT NOT NULL
     )
 `, err => {
     if (err) throw err;
@@ -190,6 +191,58 @@ app.delete('/calificaciones/:id', (req, res) => {
         res.send('calificaciones eliminado');
     });
 });
+
+// Obtener todos los roles
+app.get('/roles', (req, res) => {
+    db.query('SELECT * FROM roles', (err, results) => {
+        if (err) {
+            res.status(500).send('Error obteniendo los roles');
+            return;
+        }
+        res.json(results);
+    });
+});
+
+// Agregar un nuevo roles
+app.post('/roles', (req, res) => {
+    const { id_Usuario, id_curso, Califiacion, Detalles, Fecha } = req.body;
+    const sql = 'INSERT INTO roles (id_Usuario, id_curso, Califiacion, Detalles, Fecha) VALUES (?, ?, ?, ?, ?)';
+    db.query(sql, [id_Usuario, id_curso, Califiacion, Detalles, Fecha], (err, result) => {
+        if (err) {
+            res.status(500).send('Error agregando el roles');
+            return;
+        }
+        res.status(201).json({ id: result.insertId, id_Usuario, id_curso, Califiacion, Detalles, Fecha  });
+    });
+});
+
+// Actualizar un roles
+app.put('/roles/:id', (req, res) => {
+    const { id_Usuario, id_curso, Califiacion, Detalles, Fecha } = req.body;
+    const { id } = req.params;
+    const sql = 'UPDATE roles SET id_Usuario = ?, id_curso = ?, Califiacion = ?, Detalles = ?, Fecha = ? WHERE id = ?';
+    db.query(sql, [id_Usuario, id_curso, Califiacion, Detalles, Fecha , id], (err, result) => {
+        if (err) {
+            res.status(500).send('Error actualizando el roles');
+            return;
+        }
+        res.json({ id_Usuario, id_curso, Califiacion, Detalles, Fecha });
+    });
+});
+
+// Eliminar un roles
+app.delete('/roles/:id', (req, res) => {
+    const { id } = req.params;
+    const sql = 'DELETE FROM roles WHERE id = ?';
+    db.query(sql, [id], (err, result) => {
+        if (err) {
+            res.status(500).send('Error eliminando el roles');
+            return;
+        }
+        res.send('roles eliminado');
+    });
+});
+
 
 // Iniciar el servidor
 app.listen(PORT, () => {
