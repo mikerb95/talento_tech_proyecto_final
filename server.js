@@ -5,7 +5,7 @@ const express = require('express');
 const app = express();
 
 // Define el puerto en el cual correrá el servidor; usa el puerto definido en las variables de entorno o 3000 como predeterminado
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 // Middleware para parsear el cuerpo de las solicitudes como JSON
 app.use(express.json());
