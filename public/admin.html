@@ -3,38 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
+    <title>Perfil</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>Gestión de Biblioteca</h1>
+        <h1>Tu aula</h1>
 
         <div class="form-container">
-            <h2>Agregar Libro</h2>
-            <form id="formularioLibro">
-                <input type="text" id="Titulo" placeholder="Título" required>
-                <input type="text" id="Autor" placeholder="Autor" required>
-                <input type="text" id="Editorial" placeholder="Editorial" required>
-                <input type="number" id="Año" placeholder="Año" required>
-                <button type="submit">Agregar Libro</button>
+            <h2>Agregar Curso</h2>
+            <form id="formularioCurso">
+                <input type="text" id="id" placeholder="id" required>
+                <input type="text" id="Nombre_curso" placeholder="Nombre_curso" required>
+                <input type="text" id="Url_Curso" placeholder="Url_Curso" required>
+                <input type="number" id="Duracion" placeholder="Duracion" required>
+                <input type="number" id="Valor" placeholder="Valor" required>
+                <input type="text" id="Institucion" placeholder="Institucion" required>
+
+                <button type="submit">Agregar Curso</button>
             </form>
         </div>
 
-        <h2>Lista de Libros</h2>
-        <div id="listaLibros" class="table-container">
+        <h2>Mis cursos</h2>
+        <div id="listaCursos" class="table-container">
             <table class="book-table">
                 <thead>
                     <tr>
-                        <th>Título</th>
-                        <th>Autor</th>
-                        <th>Editorial</th>
-                        <th>Año</th>
-                        <th>Acciones</th>
+                        <th>Id</th>
+                        <th>Nombre del curso</th>
+                        <th>Ruta Web</th>
+                        <th>Duración</th>
+                        <th>Valor</th>
+                        <th>Institución</th>
                     </tr>
                 </thead>
-                <tbody id="librosTbody">
-                    <!-- Aquí se insertarán los libros con JavaScript -->
+                <tbody id="CursosTbody">
+                    <!-- Aquí se insertarán los cursos con JavaScript -->
                 </tbody>
             </table>
         </div>

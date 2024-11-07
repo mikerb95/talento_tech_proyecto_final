@@ -8,8 +8,40 @@
 /* inicio de estilos sección index.html */
 
 body {
-    background-color: #f2f2f2;
     font-family: Arial, sans-serif;
     padding: 20px;
 }
 /* fin de estilos  index.html*/
+
+/* seccion tiutlo */
+
+h1{
+  font-size: 40px;
+  text-align: center;
+  padding: 50px;
+}
+
+/* sección inicio */
+
+.inicio{
+  background-color: #fdfdfd;
+  margin: auto;
+  width: 350px;
+  text-align: center;
+  padding: 50px;
+  border-radius: 5px;
+  box-shadow: 5px 5px 0 #cccccc6b;
+  border: solid 1px #cccccc;
+}
+
+/* seccion de p inicio  */
+
+h4{
+  font-weight: bold;
+}
+/* seccion boton */
+
+button{
+  margin-bottom: 10px;
+}
+
