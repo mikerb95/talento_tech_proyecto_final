@@ -20,8 +20,6 @@ app.get('/', (req, res) => {
     res.send('Hello World!');
 });
 
-// Usa la ruta de login
-app.use('/', loginRoute);
 
 // Inicia el servidor y lo hace escuchar en el puerto especificado
 // Muestra en la consola la URL del servidor cuando está corriendo
