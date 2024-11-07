@@ -15,80 +15,202 @@
     </style>
 </head>
 <body>
-    <div class="jumbotron">
-        <div class="container text-center">
-            <h1>Clases</h1>
-            
-        </div>
-    </div>
-    <nav class="navbar navbar-inverse">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">.
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-            
-            </div>
-            <div class="collapse navbar-collapse" id="myNavbar">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="inicio.html">Inicio</a></li>
-                    <li><a href="clases.html">Clases</a></li>
-                    
-                    
-                    
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="registro.html"><span class="glyphicon glyphicon-envelope"></span> Crea tu Cuenta</a></li>
-                    <li><a href="login.html"><span class="glyphicon glyphicon-user"></span> Login</a></li>
-                </ul>
-            </div>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cursos Online</title>
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Barra de navegación */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #f8f8f8;
+            border-bottom: 1px solid #ddd;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #000;
+            margin: 0 10px;
+        }
+
+        /* Slider */
+        .slider {
+            position: relative;
+            overflow: hidden;
+            height: 400px;
+            background-color: #ddd;
+        }
+
+        .slides {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .slide {
+            min-width: 100%;
+            height: 400px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* Flechas de navegación */
+        .arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 24px;
+            color: #fff;
+            background-color: rgba(0, 0, 0, 0.5);
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+            z-index: 10;
+        }
+
+        .prev {
+            left: 10px;
+        }
+
+        .next {
+            right: 10px;
+        }
+
+        /* Contenido sobre el slider */
+        .slider-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #fff;
+        }
+
+        .slider-content h1 {
+            font-size: 48px;
+            margin: 0;
+        }
+
+        .slider-content p {
+            font-size: 18px;
+        }
+
+        .slider-content button {
+            background-color: #a0522d;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        /* Sección de productos */
+        .products {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        .product {
+            text-align: center;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            width: 250px;
+        }
+
+        .product img {
+            width: 100%;
+            border-radius: 5px;
+        }
+
+        .product button {
+            background-color: #a0522d;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Barra de navegación -->
+    <nav>
+        <div class="logo">
+            <a href="#">Cursos</a>
         </div>
     </nav>
-
-    <!-- Cards -->
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-4">
-                <div class="panel panel-primary">
-                    <div class="panel-heading"></div>
-                    <div class="panel-body">
-                        <img src="https://www.childrens.com/wps/wcm/connect/childrenspublic/839ff41e-b874-4dd4-97f1-e37e7b6b9789/shutterstock_141101149_800x480.jpg?MOD=AJPERES&CVID=" class="img-responsive"  style="height: 120px; width: 350px"  alt="Dirigido a edades de 5 a 12 años">
-                    </div>
-                    <div class="panel-footer">
-                        <a href="5 a 12 años.html" class="btn" style="background: rgb(68, 0, 128)">Ver Más</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">Dirigido a edades de 12 a 18 años</div>
-                    <div class="panel-body">
-                        <img src="https://montessorispace.com/wp-content/uploads/2019/09/Fotolia_53023572_Subscription_XXL-min.jpg" class="img-responsive"  style="height: 120px; width: 350px" alt="Dirigido a edades de 12 a 18 años">
-                    </div>
-                    <div class="panel-footer">
-                        <a href="12 a 18 años.html" class="btn" style="background: rgb(68, 0, 128)">Ver Más</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">Dirigido a edades de a 18 años en adelante</div>
-                    <div class="panel-body">
-                        <img src="https://img.freepik.com/foto-gratis/estudiantes-universitarios-diferentes-etnias-abarrotando_23-2149891355.jpg" class="img-responsive"  style="height: 120px; width: 350px"  alt="Dirigido a edades de a 18 años en adelante">
-                    </div>
-                    <div class="panel-footer">
-                        <a href="18 años en adelante.html" class="btn" style="background: rgb(68, 0, 128)">Ver Más</a>
-                    </div>
-                </div>
-            </div>
+    <!-- Productos -->
+    <section class="products">
+        <div class="product">
+            <img src="">
+            <h3>Marketing Digital</h3>
+            <button>Ver</button>
         </div>
-    </div>
-    <br>
-    <div class="footer text-center">
-        <p>© 2023 Asesoría de Clases. Todos los derechos reservados.</p>
-    </div>
+        <div class="product">
+            <img src="">
+            <h3>Comunity Manager</h3>
+            <button>Ver</button>
+        </div>
+        <div class="product">
+            <img src="">
+            <h3>Programación</h3>
+            <button>Ver</button>
+        </div>
+    </section>
+
+    <section class="products">
+        <div class="product">
+            <img src="">
+            <h3>Marketing Digital</h3>
+            <button>Ver</button>
+        </div>
+        <div class="product">
+            <img src="">
+            <h3>Comunity Manager</h3>
+            <button>Ver</button>
+        </div>
+        <div class="product">
+            <img src="">
+            <h3>Programación</h3>
+            <button>Ver</button>
+        </div>
+    </section>
+    <script>
+        let currentSlide = 0;
+
+        function showSlide(index) {
+            const slides = document.querySelector('.slides');
+            const totalSlides = document.querySelectorAll('.slide').length;
+            currentSlide = (index + totalSlides) % totalSlides;
+            slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function prevSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        // Autoplay del slider
+        setInterval(nextSlide, 5000); // Cambia cada 5 segundos
+    </script>
+
+</body>
 </body>
 </html>
 </html>
