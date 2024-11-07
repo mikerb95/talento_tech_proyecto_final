@@ -25,6 +25,20 @@ db.connect(err => {
     console.log('Conectado a la base de datos MySQL');
 });
 
+// Crear la tabla 'libros' si no existe
+db.query(`
+    CREATE TABLE IF NOT EXISTS libros (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        Titulo VARCHAR(255) NOT NULL,
+        Autor VARCHAR(255) NOT NULL,
+        Editorial VARCHAR(255) NOT NULL,
+        Año INT NOT NULL
+    )
+`, err => {
+    if (err) throw err;
+    console.log("Tabla 'Libros' creada o verificada");
+});
+
 // Rutas para manejar la información de los cursos
 
 // Obtener todos los cursos
@@ -75,6 +89,59 @@ app.delete('/cursos/:id', (req, res) => {
             return;
         }
         res.send('Curso eliminado');
+    });
+});
+
+
+
+// Obtener todos los calificaciones
+app.get('/calificaciones', (req, res) => {
+    db.query('SELECT * FROM calificaciones', (err, results) => {
+        if (err) {
+            res.status(500).send('Error obteniendo los calificaciones');
+            return;
+        }
+        res.json(results);
+    });
+});
+
+// Agregar un nuevo calificaciones
+app.post('/calificaciones', (req, res) => {
+    const { id_Usuario, id_curso, Califiacion, Detalles, Fecha } = req.body;
+    const sql = 'INSERT INTO calificaciones (id_Usuario, id_curso, Califiacion, Detalles, Fecha) VALUES (?, ?, ?, ?, ?)';
+    db.query(sql, [id_Usuario, id_curso, Califiacion, Detalles, Fecha], (err, result) => {
+        if (err) {
+            res.status(500).send('Error agregando el calificaciones');
+            return;
+        }
+        res.status(201).json({ id: result.insertId, id_Usuario, id_curso, Califiacion, Detalles, Fecha  });
+    });
+});
+
+// Actualizar un calificaciones
+app.put('/calificaciones/:id', (req, res) => {
+    const { id_Usuario, id_curso, Califiacion, Detalles, Fecha } = req.body;
+    const { id } = req.params;
+    const sql = 'UPDATE calificaciones SET id_Usuario = ?, id_curso = ?, Califiacion = ?, Detalles = ?, Fecha = ? WHERE id = ?';
+    db.query(sql, [id_Usuario, id_curso, Califiacion, Detalles, Fecha , id], (err, result) => {
+        if (err) {
+            res.status(500).send('Error actualizando el calificaciones');
+            return;
+        }
+        res.json({ id_Usuario, id_curso, Califiacion, Detalles, Fecha });
+    });
+});
+
+// Eliminar un calificaciones
+app.delete('/calificaciones/:id', (req, res) => {
+    const { id } = req.params;
+    const sql = 'DELETE FROM calificaciones WHERE id = ?';
+    db.query(sql, [id], (err, result) => {
+        if (err) {
+            res.status(500).send('Error eliminando el calificaciones');
+            return;
+        }
+        res.send('calificaciones eliminado');
     });
 });
 
