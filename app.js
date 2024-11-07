@@ -29,7 +29,7 @@ db.connect(err => {
 db.query(`
     CREATE TABLE IF NOT EXISTS cursos (
         id INT AUTO_INCREMENT PRIMARY KEY,
-        Nombre_curso VARCHAR(255) NOT NULL,
+        nombre_curso VARCHAR(255) NOT NULL,
         URL_curso VARCHAR(255) NOT NULL,
         Duracion VARCHAR(255) NOT NULL,
         Precio VARCHAR(255) NOT NULL,
@@ -76,6 +76,7 @@ db.query(`
         nombres VARCHAR(255) NOT NULL,
         apellidos VARCHAR(255) NOT NULL,
         email VARCHAR(255) NOT NULL,
+        contraseña VARCHAR(255) NULL,
         telefono INT NOT NULL,
         nickname VARCHAR(255) NOT NULL,
         fecha_creacion DATE NOT NULL,
@@ -257,28 +258,28 @@ app.get('/usuarios', (req, res) => {
 
 // Agregar un nuevo usuarios
 app.post('/usuarios', (req, res) => {
-    const { nombres, apellidos, email, telefono, nickname, fecha_creacion, rol_id} = req.body;
-    const sql = 'INSERT INTO usuarios (nombres, apellidos, email, telefono, nickname, fecha_creacion, rol_id) VALUES (?, ?, ?, ?, ?, ?, ?)';
-    db.query(sql, [nombres, apellidos, email, telefono, nickname, fecha_creacion, rol_id], (err, result) => {
+    const { nombres, apellidos, email, contraseña, telefono, nickname, fecha_creacion, rol_id} = req.body;
+    const sql = 'INSERT INTO usuarios (nombres, apellidos, email, contraseña, telefono, nickname, fecha_creacion, rol_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+    db.query(sql, [nombres, apellidos, email, contraseña, telefono, nickname, fecha_creacion, rol_id], (err, result) => {
         if (err) {
             res.status(500).send('Error agregando el usuarios');
             return;
         }
-        res.status(201).json({ id: result.insertId, nombres, apellidos, email, telefono, nickname, fecha_creacion, rol_id });
+        res.status(201).json({ id: result.insertId, nombres, apellidos, email, contraseña, telefono, nickname, fecha_creacion, rol_id });
     });
 });
 
 // Actualizar un usuarios
 app.put('/usuarios/:id', (req, res) => {
-    const { nombres, apellidos, email, telefono, nickname, fecha_creacion, rol_id } = req.body;
+    const { nombres, apellidos, email, contraseña, telefono, nickname, fecha_creacion, rol_id } = req.body;
     const { id } = req.params;
-    const sql = 'UPDATE usuarios SET nombres = ?, apellidos = ?, email = ?, telefono = ?, nickname = ?, fecha_creacion = ?, rol_id = ? WHERE id = ?';
-    db.query(sql, [nombres, apellidos, email, telefono, nickname, fecha_creacion, rol_id , id], (err, result) => {
+    const sql = 'UPDATE usuarios SET nombres = ?, apellidos = ?, email = ?, contraseña = ?,telefono = ?, nickname = ?, fecha_creacion = ?, rol_id = ? WHERE id = ?';
+    db.query(sql, [nombres, apellidos, email, contraseña, telefono, nickname, fecha_creacion, rol_id , id], (err, result) => {
         if (err) {
             res.status(500).send('Error actualizando el usuarios');
             return;
         }
-        res.json({ nombres, apellidos, email, telefono, nickname, fecha_creacion, rol_id });
+        res.json({ nombres, apellidos, email, contraseña, telefono, nickname, fecha_creacion, rol_id });
     });
 });
 
