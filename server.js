@@ -103,6 +103,34 @@ db.query(`
     console.log("Tabla 'usuarios' creada o verificada");
 });
 
+// ----------------------------------------------------------------
+
+// Ruta de autenticación
+router.post('/login', (req, res) => {
+    const { email, contraseña } = req.body;
+    const query = 'SELECT * FROM user WHERE email = ? AND contraseña = ?';
+    db.query(query, [email, contraseña], (error, results) => {
+        if (error) {
+            console.error('Error en la consulta:', error);
+            res.status(500).send('Error interno en el servidor');
+            return;
+        }
+        if (results.length > 0) {
+            const user = results[0];
+            const rol = user.rol;
+
+            if (rol === 'admin') {
+                res.redirect('/admin/dashboard');
+            } else if (rol === 'user') {
+                res.redirect('/user/dashboard');
+            } else {
+                res.status(403).send('Rol no autorizado');
+            }
+        } else {
+            res.status(401).send('Credenciales incorrectas');
+        }
+    });
+});
 // Rutas para manejar la información de los cursos
 
 // Obtener todos los cursos
