@@ -61,6 +61,7 @@ db.query(`
         email VARCHAR(255) NOT NULL,
         telefono VARCHAR(20) NOT NULL,
         nickname VARCHAR(255) NOT NULL,
+        contraseña VARCHAR(255) NULL,
         fecha_creacion DATE NOT NULL,
         rol_id INT NOT NULL,
         FOREIGN KEY (rol_id) REFERENCES roles(id) ON DELETE CASCADE ON UPDATE CASCADE
@@ -104,12 +105,12 @@ db.query(`
     console.log("Tabla 'calificaciones' creada o verificada");
 });
 
-// ----------------------------------------------------------------
+// ---------------Api para login ----------------------------------
 
 // Ruta de autenticación
-router.post('/login', (req, res) => {
+app.post('/login', (req, res) => {
     const { email, contraseña } = req.body;
-    const query = 'SELECT * FROM user WHERE email = ? AND contraseña = ?';
+    const query = 'SELECT * FROM usuarios WHERE email = ? AND contraseña = ?';
     db.query(query, [email, contraseña], (error, results) => {
         if (error) {
             console.error('Error en la consulta:', error);
@@ -117,13 +118,13 @@ router.post('/login', (req, res) => {
             return;
         }
         if (results.length > 0) {
-            const user = results[0];
-            const rol = user.rol;
+            const usuario = results[0];
+            const rol = usuario.rol;
 
             if (rol === 'admin') {
-                res.redirect('/admin/dashboard');
+                res.redirect('/admin/admin');
             } else if (rol === 'user') {
-                res.redirect('/user/dashboard');
+                res.redirect('/usuarios/perfil');
             } else {
                 res.status(403).send('Rol no autorizado');
             }
