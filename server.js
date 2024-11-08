@@ -147,7 +147,7 @@ app.post('/registrar', (req, res) => {
             res.status(500).send('Error al crear usuario');
             return;
         }
-        res.status(201).json({ id: result.insertId, nombres, apellidos, email, telefono, nickname, contraseña, fecha_creacion, rol_id  });
+        res.redirect('/');
     });
 });
 
