@@ -45,3 +45,31 @@ button{
   margin-bottom: 10px;
 }
 
+/* sección inicio */
+
+.registro{
+  background-color: #fdfdfd;
+  margin: auto;
+  width: 350px;
+  text-align: center;
+  padding: 25px;
+  border-radius: 5px;
+  box-shadow: 5px 5px 0 #cccccc6b;
+  border: solid 1px #cccccc;
+}
+
+
+/* seccion de label*/
+.mb-3 label{ 
+    font-size: 15px;
+    margin-bottom: 2px;
+    font-weight: bold;
+}
+
+/* seccion de input*/
+.mb-3 input{ 
+    font-size: 15px;
+    height: 34px;
+}
+
+
