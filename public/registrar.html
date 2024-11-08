@@ -15,7 +15,7 @@
 </head>
 <body>
     <div class="registro_div">
-        <form class="registrar" method="POST" action="/js/registro">
+        <form class="registrar" method="POST" action="../server.js">
             <h4 class="titulo_pag">REGISTRARSE</h4>
             <!-- seccion de nombres -->
             <div class="mb-3 divInicio">
@@ -49,11 +49,11 @@
             </div>
             <!-- seccion de fecha de creacion -->
             <div class="mb-3 divInicio">
-                <input value="" type="date" class="form-control" id="fecha" hidden>
+                <input value="" type="date" class="form-control" id="fecha_creacion" hidden>
             </div>
             <!-- seccion de rol -->
             <div class="mb-3 divInicio">
-                <input value="2" type="number" class="form-control" id="rol" hidden>
+                <input value="2" type="number" class="form-control" id="rol_id" hidden>
             </div>
             <!-- boton -->
             <button type="submit" class="btn btn-primary botones">Registrarse</button>

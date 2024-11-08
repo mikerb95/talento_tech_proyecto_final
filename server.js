@@ -133,6 +133,24 @@ app.post('/login', (req, res) => {
         }
     });
 });
+
+// ---------------Api para manejar el registro  ----------------------------------
+
+//ruta de registro
+app.post('/registrar', (req, res) => {
+    const { nombres, apellidos, email, telefono, nickname, contraseña, fecha_creacion, rol_id } = req.body;
+    const sql = 'INSERT INTO usuarios (nombres, apellidos, email, telefono, nickname, contraseña, fecha_creacion, rol_id ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+    db.query(sql, [nombres, apellidos, email, telefono, nickname, contraseña, fecha_creacion, rol_id], (err, result) => {
+        if (err) {
+            res.status(500).send('Erro al crear usuario');
+            return;
+        }
+        res.status(201).json({ id: result.insertId, nombres, apellidos, email, telefono, nickname, contraseña, fecha_creacion, rol_id  });
+    });
+});
+
+
+
 // Rutas para manejar la información de los cursos
 
 // Obtener todos los cursos
