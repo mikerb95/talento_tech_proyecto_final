@@ -1,0 +1,194 @@
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Header */
+header {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    background-color: #f4f4f4;
+    border-bottom: 1px solid #ddd;
+}
+
+header .icono img {
+    height: 50px;
+    margin-right: 20px;
+}
+
+header .encabezado h1 {
+    font-size: 32px;
+    margin: 0;
+    color: #333;
+}
+
+header .encabezado h3 {
+    font-size: 16px;
+    color: #666;
+    margin: 5px 0 0;
+    text-align: center;
+}
+
+/* Barra de navegación */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #c3a26c;
+    border-bottom: 1px solid #ddd;
+}
+
+nav a {
+    text-decoration: none;
+    color: #000;
+    margin: 0 10px;
+}
+
+/* Botón en la barra de navegación */
+nav .logo button {
+    padding: 10px 20px;
+    background: linear-gradient(45deg, #cb8310, #743c03);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+nav .logo button:hover {
+    background: linear-gradient(45deg, #b49923, #644709);
+    transform: scale(1.05);
+}
+
+nav .logo button:active {
+    transform: scale(0.95);
+}
+
+/* Slider */
+.slider {
+    position: relative;
+    overflow: hidden;
+    height: 400px;
+    background-color: #ddd;
+}
+
+.slides {
+    display: flex;
+    transition: transform 0.5s ease;
+}
+
+.slide {
+    min-width: 100%;
+    height: 400px;
+    background-size: cover;
+    background-position: center;
+}
+
+.arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 24px;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    z-index: 10;
+}
+
+.prev {
+    left: 10px;
+}
+
+.next {
+    right: 10px;
+}
+
+/* Contenido sobre el slider */
+.slider-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #fff;
+}
+
+.slider-content h1 {
+    font-size: 48px;
+    margin: 0;
+}
+
+.slider-content p {
+    font-size: 18px;
+}
+
+.slider-content button {
+    background-color: #a0522d;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* Sección de productos */
+.products {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+.product {
+    text-align: center;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    width: 250px;
+}
+
+.product img {
+    width: 100%;
+    border-radius: 5px;
+}
+
+.product button {
+    background-color: #a0522d;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+/* Footer */
+footer {
+    background-color: #333;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+}
+
+footer .contact-info p {
+    margin: 5px 0;
+}
+
+footer a {
+    color: #a0522d;
+    text-decoration: none;
+}
+
+footer p {
+    font-size: 14px;
+    margin-top: 10px;
+}
