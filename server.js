@@ -40,39 +40,7 @@ db.connect((error)=> {
     console.log('Conectado a la base de datos');
 });
 
-
-// Crear la tabla 'cursos' si no existe
-db.query(`
-    CREATE TABLE IF NOT EXISTS cursos (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        nombre_curso VARCHAR(255) NOT NULL,
-        URL_curso VARCHAR(255) NOT NULL,
-        Duracion VARCHAR(255) NOT NULL,
-        Precio VARCHAR(255) NOT NULL,
-        Institucion VARCHAR(255) NOT NULL
-    )
-`, err => {
-    if (err) throw err;
-    console.log("Tabla 'cursos' creada o verificada");
-});
-
-
-// Crear la tabla 'calificaciones' si no existe
-db.query(`
-    CREATE TABLE IF NOT EXISTS calificaciones (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        id_Usuario INT NOT NULL,
-        id_curso INT NOT NULL,
-        Calificacion INT NOT NULL,
-        Detalles VARCHAR(255) NOT NULL,
-        Fecha DATE NOT NULL
-    )
-`, err => {
-    if (err) throw err;
-    console.log("Tabla 'calificaciones' creada o verificada");
-});
-
-
+//-------- creacion de tablas   --------------------
 // Crear la tabla 'roles' si no existe
 db.query(`
     CREATE TABLE IF NOT EXISTS roles (
@@ -84,7 +52,6 @@ db.query(`
     console.log("Tabla 'roles' creada o verificada");
 });
 
-
 // Crear la tabla 'usuarios' si no existe
 db.query(`
     CREATE TABLE IF NOT EXISTS usuarios (
@@ -92,15 +59,49 @@ db.query(`
         nombres VARCHAR(255) NOT NULL,
         apellidos VARCHAR(255) NOT NULL,
         email VARCHAR(255) NOT NULL,
-        contraseña VARCHAR(255) NULL,
-        telefono INT NOT NULL,
+        telefono VARCHAR(20) NOT NULL,
         nickname VARCHAR(255) NOT NULL,
         fecha_creacion DATE NOT NULL,
-        rol_id INT NOT NULL
+        rol_id INT NOT NULL,
+        FOREIGN KEY (rol_id) REFERENCES roles(id) ON DELETE CASCADE ON UPDATE CASCADE
     )
 `, err => {
     if (err) throw err;
     console.log("Tabla 'usuarios' creada o verificada");
+});
+
+// Crear la tabla 'cursos' si no existe
+db.query(`
+    CREATE TABLE IF NOT EXISTS cursos (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        nombre_curso VARCHAR(255) NOT NULL,
+        URL_curso VARCHAR(255) NOT NULL,
+        duracion VARCHAR(50) NOT NULL,
+        valor INT NOT NULL,
+        institucion VARCHAR(255) NOT NULL
+    )
+`, err => {
+    if (err) throw err;
+    console.log("Tabla 'cursos' creada o verificada");
+});
+
+
+// Crear la tabla 'calificaciones' si no existe
+db.query(`
+    CREATE TABLE IF NOT EXISTS calificaciones (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        id_usuario INT NOT NULL,
+        id_curso INT NOT NULL,
+        calificacion INT NOT NULL CHECK (calificacion BETWEEN 1 AND 10),
+        detalles VARCHAR(255) NOT NULL,
+        fecha DATE NOT NULL,
+        FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE ON UPDATE CASCADE,
+        FOREIGN KEY (id_curso) REFERENCES cursos(id) ON DELETE CASCADE ON UPDATE CASCADE
+
+    )
+`, err => {
+    if (err) throw err;
+    console.log("Tabla 'calificaciones' creada o verificada");
 });
 
 // ----------------------------------------------------------------
