@@ -119,11 +119,11 @@ app.post('/index', (req, res) => {
         }
         if (results.length > 0) {
             const usuario = results[0];
-            const rol = usuario.rol;
+            const rol_id = usuario.rol_id;
 
-            if (rol === 'admin') {
+            if (rol_id === 1) {
                 res.redirect('/admin/admin');
-            } else if (rol === 'usuario') {
+            } else if (rol_id === 2) {
                 res.redirect('/usuarios/perfil');
             } else {
                 res.status(403).send('Rol no autorizado');
@@ -138,6 +138,7 @@ app.post('/index', (req, res) => {
 
 //ruta de registro
 app.post('/registrar', (req, res) => {
+    //console.log(req.body); muestra los datos enviados en consola a traves de un JSON para confirmar valores
     const { nombres, apellidos, email, telefono, nickname, contraseña, fecha_creacion, rol_id } = req.body;
     const sql = 'INSERT INTO usuarios (nombres, apellidos, email, telefono, nickname, contraseña, fecha_creacion, rol_id ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
     db.query(sql, [nombres, apellidos, email, telefono, nickname, contraseña, fecha_creacion, rol_id], (err, result) => {
