@@ -7,7 +7,7 @@
 /* reset de CSS fin */
 /* inicio de estilos sección index.html */
 
-body {
+body{
     font-family: Arial, sans-serif;
     padding: 20px;
 }
@@ -15,7 +15,7 @@ body {
 
 /* seccion tiutlo */
 
-h1{
+.titulo_bienvenida{
   font-size: 40px;
   text-align: center;
   padding: 50px;
@@ -34,20 +34,9 @@ h1{
   border: solid 1px #cccccc;
 }
 
-/* seccion de p inicio  */
+/* sección resgitro */
 
-h4{
-  font-weight: bold;
-}
-/* seccion boton */
-
-button{
-  margin-bottom: 10px;
-}
-
-/* sección inicio */
-
-.registro{
+.registro_div{
   background-color: #fdfdfd;
   margin: auto;
   width: 350px;
@@ -58,16 +47,26 @@ button{
   border: solid 1px #cccccc;
 }
 
+/* seccion de p inicio  */
+
+.titulo_pag{
+  font-weight: bold;
+}
+/* seccion boton */
+
+.botones{
+  margin-bottom: 10px;
+}
 
 /* seccion de label*/
-.mb-3 label{ 
+.divInicio label{ 
     font-size: 15px;
     margin-bottom: 2px;
     font-weight: bold;
 }
 
 /* seccion de input*/
-.mb-3 input{ 
+.divInicio input{ 
     font-size: 15px;
     height: 34px;
 }
