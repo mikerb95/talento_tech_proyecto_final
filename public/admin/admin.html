@@ -1,49 +1,113 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil</title>
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8"> <!-- Define el conjunto de caracteres UTF-8 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Hacer la página responsive -->
+    
+    <!-- Icono de la pestaña -->
+    <link rel="icon" type="image/png" href="images/Mini_icono.png">
+    
+    <!-- Título de la pestaña del navegador -->
+    <title>Administrar cursos</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <!-- jQuery y Popper.js (dependencias de Bootstrap) -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    
+    <!-- JavaScript personalizado -->
+    <script src="scripts.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h1>Tu aula</h1>
-
-        <div class="form-container">
-            <h2>Agregar Curso</h2>
-            <form id="formularioCurso">
-                <input type="text" id="id" placeholder="id" required>
-                <input type="text" id="Nombre_curso" placeholder="Nombre_curso" required>
-                <input type="text" id="Url_Curso" placeholder="Url_Curso" required>
-                <input type="number" id="Duracion" placeholder="Duracion" required>
-                <input type="number" id="Valor" placeholder="Valor" required>
-                <input type="text" id="Institucion" placeholder="Institucion" required>
-
-                <button type="submit">Agregar Curso</button>
-            </form>
+    <!-- Encabezado de la página -->
+    <header class="bg-light py-3">
+        <div class="container d-flex align-items-center">
+            <div class="icono">
+                <img src="Logo.png" alt="Logo de Talentum" width="100">
+            </div>
+            <div class="encabezado col-sm-8 text-center mx-auto">
+                <h1>Talentum</h1>
+                <h6>Descubre tu talento, transforma tu futuro.</h6>
+            </div>
         </div>
+    </header>
 
-        <h2>Mis cursos</h2>
-        <div id="listaCursos" class="table-container">
-            <table class="book-table">
-                <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Nombre del curso</th>
-                        <th>Ruta Web</th>
-                        <th>Duración</th>
-                        <th>Valor</th>
-                        <th>Institución</th>
-                    </tr>
-                </thead>
-                <tbody id="CursosTbody">
-                    <!-- Aquí se insertarán los cursos con JavaScript -->
-                </tbody>
-            </table>
+    <!-- Contenedor principal de la página -->
+    <div class="container mt-5">
+        <!-- Tarjeta para el área de administración de cursos -->
+        <div class="card mt-4">
+            <div class="card-header text-center">
+                <h2>TU AULA</h2>
+            </div>
+            <div class="card-body">
+                <!-- Formulario para agregar un curso -->
+                <form id="course-form">
+                    <div class="mb-3">
+                        <label for="Titulo_Curso" class="form-label">Título del Curso</label>
+                        <input type="text" class="form-control" id="Titulo_Curso" name="Titulo_Curso" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="descripcion_Curso" class="form-label">Descripción</label>
+                        <textarea class="form-control" id="descripcion_Curso" name="descripcion_Curso" required></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="Url_Curso" class="form-label">URL</label>
+                        <input type="url" class="form-control" id="Url_Curso" name="Url_Curso" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="duracion_Curso" class="form-label">Duración del Curso</label>
+                        <input type="number" class="form-control" id="duracion_Curso" name="duracion_Curso" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="valor_Curso" class="form-label">Valor</label>
+                        <input type="number" class="form-control" id="valor_Curso" name="valor_Curso" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="institucion" class="form-label">Institución</label>
+                        <input type="text" class="form-control" id="institucion" name="institucion" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Agregar Curso</button>
+                </form>
+                
+                <!-- Separador horizontal -->
+                <hr>
+                
+                <!-- Tabla para listar los cursos -->
+                <h3>Lista de Cursos</h3>
+                <table class="table table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Título del Curso</th>
+                            <th>Descripción</th>
+                            <th>Ruta Web</th>
+                            <th>Duración</th>
+                            <th>Valor</th>
+                            <th>Institución</th>
+                        </tr>
+                    </thead>
+                    <tbody id="course-list">
+                        <!-- Aquí se añadirán los cursos dinámicamente mediante JavaScript -->
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
-    <script src="main.js"></script>
+    <!-- Pie de página -->
+    <footer class="bg-dark text-white text-center p-3 mt-4">
+        <p>&copy; 2024 Talentum, Todos los derechos reservados.</p>
+    </footer>
 </body>
 </html>
+
