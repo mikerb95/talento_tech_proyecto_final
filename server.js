@@ -142,7 +142,7 @@ app.post('/registrar', (req, res) => {
     const sql = 'INSERT INTO usuarios (nombres, apellidos, email, telefono, nickname, contraseña, fecha_creacion, rol_id ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
     db.query(sql, [nombres, apellidos, email, telefono, nickname, contraseña, fecha_creacion, rol_id], (err, result) => {
         if (err) {
-            res.status(500).send('Erro al crear usuario');
+            res.status(500).send('Error al crear usuario');
             return;
         }
         res.status(201).json({ id: result.insertId, nombres, apellidos, email, telefono, nickname, contraseña, fecha_creacion, rol_id  });
