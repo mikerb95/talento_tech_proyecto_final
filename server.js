@@ -360,12 +360,6 @@ app.delete('/usuarios/:id', (req, res) => {
     });
 });
 
-// Inicia el servidor y lo hace escuchar en el puerto especificado
-// Muestra en la consola la URL del servidor cuando está corriendo
-app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}`);
-});
-
 //------------------Api de admin------------------
 
 // Configuración de body-parser
