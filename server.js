@@ -14,13 +14,6 @@ app.use(express.json());
 // Los archivos en 'public' serán accesibles directamente desde el navegador
 app.use(express.static('public'));
 
-// Definición de la ruta principal ("/")
-// Cuando un cliente hace una solicitud GET a "/", el servidor responde con "Hello World!"
-app.get('/', (req, res) => {
-    res.send('Hello World!');
-});
-
-
 // Inicia el servidor y lo hace escuchar en el puerto especificado
 // Muestra en la consola la URL del servidor cuando está corriendo
 app.listen(PORT, () => {
