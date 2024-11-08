@@ -123,7 +123,7 @@ app.post('/login', (req, res) => {
 
             if (rol === 'admin') {
                 res.redirect('/admin/admin');
-            } else if (rol === 'user') {
+            } else if (rol === 'usuario') {
                 res.redirect('/usuarios/perfil');
             } else {
                 res.status(403).send('Rol no autorizado');
