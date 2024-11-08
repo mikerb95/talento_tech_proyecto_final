@@ -7,7 +7,7 @@
 /* reset de CSS fin */
 /* inicio de estilos sección index.html */
 
-body {
+body{
     font-family: Arial, sans-serif;
     padding: 20px;
 }
@@ -15,7 +15,7 @@ body {
 
 /* seccion tiutlo */
 
-h1{
+.titulo_bienvenida{
   font-size: 40px;
   text-align: center;
   padding: 50px;
@@ -49,24 +49,24 @@ h1{
 
 /* seccion de p inicio  */
 
-h4{
+.titulo_pag{
   font-weight: bold;
 }
 /* seccion boton */
 
-button{
+.botones{
   margin-bottom: 10px;
 }
 
 /* seccion de label*/
-.mb-3 label{ 
+.divInicio label{ 
     font-size: 15px;
     margin-bottom: 2px;
     font-weight: bold;
 }
 
 /* seccion de input*/
-.mb-3 input{ 
+.divInicio input{ 
     font-size: 15px;
     height: 34px;
 }
