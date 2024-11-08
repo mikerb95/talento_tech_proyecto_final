@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS calificaciones (
 
     CREATE TABLE IF NOT EXISTS cursos (
         id INT AUTO_INCREMENT PRIMARY KEY,
-        Nombre_curso VARCHAR(255) NOT NULL,
+        nombre_curso VARCHAR(255) NOT NULL,
         URL_curso VARCHAR(255) NOT NULL,
         Duracion VARCHAR(255) NOT NULL,
         Precio VARCHAR(255) NOT NULL,
@@ -74,6 +74,7 @@ CREATE TABLE IF NOT EXISTS calificaciones (
         nombres VARCHAR(255) NOT NULL,
         apellidos VARCHAR(255) NOT NULL,
         email VARCHAR(255) NOT NULL,
+        contraseña VARCHAR(255) NULL,
         telefono INT NOT NULL,
         nickname VARCHAR(255) NOT NULL,
         fecha_creacion DATE NOT NULL,
