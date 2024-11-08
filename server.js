@@ -109,7 +109,7 @@ db.query(`
 
 // Ruta de autenticación
 app.post('/index', (req, res) => {
-    console.log(req.body);
+    //console.log(req.body);
     const { email, contraseña } = req.body;
     const query = 'SELECT * FROM usuarios WHERE email = ? AND contraseña = ?';
     db.query(query, [email, contraseña], (error, results) => {
