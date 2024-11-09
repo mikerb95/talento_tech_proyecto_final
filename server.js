@@ -206,6 +206,7 @@ app.delete('/cursos/:id', (req, res) => {
     });
 });
 
+// ---------------Api para manejar la información de los calificaciones y perfil  ----------------------------------
 // Obtener todos los calificaciones
 app.get('/calificaciones', (req, res) => {
     db.query('SELECT * FROM calificaciones', (err, results) => {
