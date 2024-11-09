@@ -416,16 +416,6 @@ app.delete('/cursos/:id', (req, res) => {
 
 //pPOST para links de alexis >:v
 
-
-// Conectar a la base de datos
-db.connect((err) => {
-    if (err) {
-        console.error('Error de conexión a la base de datos:', err);
-        return;
-    }
-    console.log('Conexión a la base de datos establecida');
-});
-
 // Ruta para mostrar los cursos
 app.get('/cursos', (req, res) => {
     // Recuperar los cursos de la base de datos
