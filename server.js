@@ -414,7 +414,73 @@ app.delete('/cursos/:id', (req, res) => {
     });
 });
 
-//------------------api de perfil--------------------------------
+//pPOST para links de alexis >:v
+
+
+// Conectar a la base de datos
+db.connect((err) => {
+    if (err) {
+        console.error('Error de conexión a la base de datos:', err);
+        return;
+    }
+    console.log('Conexión a la base de datos establecida');
+});
+
+// Ruta para mostrar los cursos
+app.get('/cursos', (req, res) => {
+    // Recuperar los cursos de la base de datos
+    db.query('SELECT * FROM cursos', (err, resultados) => {
+        if (err) {
+            console.error('Error al recuperar los cursos:', err);
+            res.status(500).send('Error interno del servidor');
+            return;
+        }
+
+        // Renderizar la página de cursos 
+        let html = '<h2>Cursos Disponibles</h2><ul>';
+
+        // Recorrer los cursos y mostrar cada uno con un botón "Ver Más"
+        resultados.forEach(curso => {
+            html += `
+                <li>
+                    <strong>${curso.nombre_curso}</strong> - ${curso.Duracion} 
+                    <form action="/ver-mas" method="POST">
+                        <input type="hidden" name="cursoId" value="${curso.id}">
+                        <button type="submit">Ver Más</button>
+                    </form>
+                </li>
+            `;
+        });
+
+        html += '</ul>';
+        res.send(html);
+    });
+});
+
+// Ruta para manejar el botón "Ver Más" (POST)
+app.post('/ver-mas', (req, res) => {
+    const cursoId = req.body.cursoId;
+
+    // Buscar el curso con el ID dado
+    db.query('SELECT * FROM cursos WHERE id = ?', [cursoId], (err, resultados) => {
+        if (err) {
+            console.error('Error al recuperar el curso:', err);
+            res.status(500).send('Error interno del servidor');
+            return;
+        }
+
+        if (resultados.length === 0) {
+            res.status(404).send('Curso no encontrado');
+            return;
+        }
+
+        const curso = resultados[0];
+        // Redirigir al enlace del curso
+        res.redirect(curso.URL_curso);
+    });
+});
+
+
 
 // Iniciar el servidor
 app.listen(PORT, () => {
