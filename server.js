@@ -362,18 +362,6 @@ app.delete('/usuarios/:id', (req, res) => {
 
 //------------------Api de admin------------------
 
-// Configuración de body-parser
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-db.connect(err => {
-    if (err) {
-        console.error('Error conectando a la base de datos:', err.stack);
-        return;
-    }
-    console.log('Conectado a la base de datos MySQL');
-});
-
 // Rutas para manejar la información de los cursos
 
 // Obtener todos los cursos
