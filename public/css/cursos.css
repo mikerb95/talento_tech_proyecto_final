@@ -14,7 +14,7 @@
 
 /* Efecto al pasar el ratón por encima */
 .curso .card button:hover {
-    background: linear-gradient(45deg, #2b2692, #592c98); /* Gradiente invertido al pasar el ratón */
+    background: linear-gradient(45deg, #2b2692, #0a0c6a); /* Gradiente invertido al pasar el ratón */
     transform: scale(1.05); /* Aumenta ligeramente el tamaño */
 }
 
