@@ -125,7 +125,7 @@ app.post('/index', (req, res) => {
             if (rol_id === 1) {
                 res.redirect('/admin/admin');
             } else if (rol_id === 2) {
-                res.redirect('/usuarios/perfil');
+                res.redirect('/perfil');
             } else {
                 res.status(403).send('Rol no autorizado');
             }
