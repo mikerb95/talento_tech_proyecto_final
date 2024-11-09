@@ -413,26 +413,26 @@ app.get('/cursos', (req, res) => {
 // Agregar un nuevo curso
 app.post('/cursos', (req, res) => {
     const { nombre_curso, URL_curso, Duracion, Precio, Institucion } = req.body;
-    const sql = 'INSERT INTO cursos (Nombre_curso, URL_curso, Duracion, Precio, Institucion ) VALUES (?, ?, ?, ?, ?)';
-    db.query(sql, [Nombre_curso, URL_curso, Duracion, Valor, Institucion], (err, result) => {
+    const sql = 'INSERT INTO cursos (nombre_curso, URL_curso, Duracion, Precio, Institucion ) VALUES (?, ?, ?, ?, ?)';
+    db.query(sql, [nombre_curso, URL_curso, Duracion, Valor, Institucion], (err, result) => {
         if (err) {
             res.status(500).send('Error agregando el curso');
             return;
         }
-        res.status(201).json({ id: result.insertId, Nombre_curso, URL_curso, Duracion, Precio, Institucion  });
+        res.status(201).json({ id: result.insertId, nombre_curso, URL_curso, Duracion, Precio, Institucion  });
     });
 });
 // Actualizar un curso
 app.put('/cursos/:id', (req, res) => {
-    const { Nombre_curso, URL_curso, Duracion, Valor, Institucion } = req.body;
+    const { nombre_curso, URL_curso, Duracion, Valor, Institucion } = req.body;
     const { id } = req.params;
     const sql = 'UPDATE cursos SET nombre_curso = ?, URL_curso = ?, Duracion = ?, Precio = ?, Institucion = ? WHERE id = ?';
-    db.query(sql, [Nombre_curso, URL_curso, Duracion, Valor, Institucion , id], (err, result) => {
+    db.query(sql, [nombre_curso, URL_curso, Duracion, Valor, Institucion , id], (err, result) => {
         if (err) {
             res.status(500).send('Error actualizando el curso');
             return;
         }
-        res.json({ id, Nombre_curso, URL_curso, Duracion, Valor, Institucion  });
+        res.json({ id, nombre_curso, URL_curso, Duracion, Valor, Institucion  });
     });
 });
 
