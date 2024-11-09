@@ -6,14 +6,16 @@ const bodyParser = require('body-parser');
 // Inicializamos el módulo Express-session
 const session = require('express-session');
 
+// Inicializa una instancia de la aplicación Express
+const app = express();
+
+// Inicializa el middleware express-session
+
 app.use(session({
     secret: 'tu_clave_secreta',
     resave: false,
     saveUninitialized: true
 }));
-
-// Inicializa una instancia de la aplicación Express
-const app = express();
 
 // Define el puerto en el cual correrá el servidor; usa el puerto definido en las variables de entorno o 3000 como predeterminado
 const PORT = process.env.PORT || 5000;
