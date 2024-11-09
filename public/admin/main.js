@@ -50,7 +50,7 @@ async function agregarCurso() {
     const Duracion = document.getElementById('Duracion').value;
     const Valor = document.getElementById('Valor').value;
     const Institucion = document.getElementById('Institucion').value;
-    const Acciones = document.getElementById('Acciones').value;
+   
 
     try {
         const response = await fetch(apiUrl, {
