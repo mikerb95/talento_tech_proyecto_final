@@ -1,0 +1,62 @@
+/* Borde negro para los recuadros */
+.border-black {
+    border: 2px solid black !important;
+}
+
+/* Estilo para los recuadros */
+.container .border-black {
+    background-color: #f8f9fa; /* Color de fondo claro */
+    padding: 20px;
+    border-radius: 8px; /* Bordes redondeados */
+    transition: transform 0.2s ease-in-out;
+}
+
+/* Efecto de sombra y aumento al pasar el cursor */
+.container .border-black:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilo para los títulos dentro de los recuadros */
+.border-black h5 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* Estilo para el texto descriptivo */
+.border-black p {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+/* Espaciado del botón dentro de los recuadros */
+.border-black .btn {
+    margin-top: 10px;
+}
+
+/* Estilos para el encabezado */
+header {
+    background-color: #f1f1f1;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    font-size: 2rem;
+    color: #333;
+}
+
+header h6 {
+    font-size: 1rem;
+    color: #666;
+}
+
+/* Estilos para el pie de página */
+footer {
+    background-color: #333;
+    color: #fff;
+    font-size: 0.9rem;
+    padding: 15px;
+}
