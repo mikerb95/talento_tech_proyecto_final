@@ -3,8 +3,19 @@ const express = require('express');
 const mysql = require('mysql2');
 const bodyParser = require('body-parser');
 
+// Inicializamos el módulo Express-session
+const session = require('express-session');
+
 // Inicializa una instancia de la aplicación Express
 const app = express();
+
+// Inicializa el middleware express-session
+
+app.use(session({
+    secret: 'tu_clave_secreta',
+    resave: false,
+    saveUninitialized: true
+}));
 
 // Define el puerto en el cual correrá el servidor; usa el puerto definido en las variables de entorno o 3000 como predeterminado
 const PORT = process.env.PORT || 5000;
@@ -109,7 +120,6 @@ db.query(`
 
 // Ruta de autenticación
 app.post('/index', (req, res) => {
-    //console.log(req.body);
     const { email, contraseña } = req.body;
     const query = 'SELECT * FROM usuarios WHERE email = ? AND contraseña = ?';
     db.query(query, [email, contraseña], (error, results) => {
@@ -121,6 +131,10 @@ app.post('/index', (req, res) => {
         if (results.length > 0) {
             const usuario = results[0];
             const rol_id = usuario.rol_id;
+            
+            // Guardar el ID del usuario en la sesión
+            req.session.userId = usuario.id; 
+            req.session.rolId = rol_id;
 
             if (rol_id === 1) {
                 res.redirect('/admin/admin');
@@ -207,6 +221,26 @@ app.delete('/cursos/:id', (req, res) => {
 });
 
 // ---------------Api para manejar la información de los calificaciones y perfil  ----------------------------------
+// Obtener perfil
+app.get('/perfil', (req, res) => {
+    // Verificar si el usuario está logueado
+    if (!req.session.userId) {
+        return res.redirect('/login');
+    }
+
+    // Consultar la información del usuario usando el ID guardado en la sesión
+    const query = 'SELECT * FROM usuarios WHERE id = ?';
+    db.query(query, [req.session.userId], (error, results) => {
+        if (error) {
+            console.error('Error:', error);
+            return res.status(500).send('Error del servidor');
+        }
+        
+        // Renderizar la vista con la información del usuario
+        res.render('perfil', { usuario: results[0] });
+    });
+});
+
 // Obtener todos los calificaciones
 app.get('/calificaciones', (req, res) => {
     db.query('SELECT * FROM calificaciones', (err, results) => {
