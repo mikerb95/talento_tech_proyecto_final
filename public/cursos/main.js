@@ -27,3 +27,73 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+
+//Linea para traer calificaciones y opiniones de los cursos :v
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Elementos del DOM
+    const cursosContainer = document.querySelector('.curso');
+
+    // Función para obtener y mostrar los cursos con calificaciones y opiniones
+    function obtenerCursos() {
+        fetch('/cursos')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error en la red');
+                }
+                return response.json();
+            })
+            .then(cursos => {
+                cursosContainer.innerHTML = '';
+                cursos.forEach(curso => {
+                    fetch(`/cursos/${curso.id}/calificaciones`)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Error en la red');
+                            }
+                            return response.json();
+                        })
+                        .then(calificaciones => {
+                            const calificacionPromedio = calificaciones.reduce((sum, cal) => sum + cal.Calificacion, 0) / calificaciones.length;
+                            const opiniones = calificaciones.map(cal => `<p>${cal.Detalles}</p>`).join('');
+
+                            const cursoCard = document.createElement('div');
+                            cursoCard.classList.add('col-md-6');
+                            cursoCard.innerHTML = `
+                                <div class="curso-izquierda">
+                                    <div class="card">
+                                        <img src="${curso.img_url}" alt="Imagen del curso" class="card-img-top">
+                                        <div class="card-body">
+                                            <div class="calificacion mb-3">
+                                                <h3 class="h5">Calificación</h3>
+                                                <div class="stars">${'★'.repeat(calificacionPromedio)}${'☆'.repeat(5 - calificacionPromedio)}</div>
+                                            </div>
+                                            <div class="opiniones">
+                                                <h3 class="h5">Opiniones</h3>
+                                                <div class="card-text">${opiniones}</div>
+                                            </div>
+                                            <div class="link mt-3">
+                                                <h3 class="h5">Link</h3>
+                                                <a href="${curso.URL_curso}" class="btn btn-primary" target="_blank">Ver más</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                            cursosContainer.appendChild(cursoCard);
+                        })
+                        .catch(error => {
+                            console.error('Error obteniendo las calificaciones:', error);
+                        });
+                });
+            })
+            .catch(error => {
+                console.error('Error obteniendo los cursos:', error);
+            });
+    }
+
+    // Inicializar la lista de cursos
+    obtenerCursos();
+});
+

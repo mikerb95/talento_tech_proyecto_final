@@ -505,6 +505,31 @@ app.post('/ver-mas', (req, res) => {
     });
 });
 
+//opiniones y calificaciones
+
+app.get('/cursos', (req, res) => {
+    db.query('SELECT * FROM cursos', (err, resultados) => {
+        if (err) {
+            console.error('Error al recuperar los cursos:', err);
+            res.status(500).send('Error interno del servidor');
+            return;
+        }
+        res.json(resultados);
+    });
+});
+
+app.get('/cursos/:id/calificaciones', (req, res) => {
+    const cursoId = req.params.id;
+    db.query('SELECT * FROM calificaciones WHERE id_curso = ?', [cursoId], (err, resultados) => {
+        if (err) {
+            console.error('Error al recuperar las calificaciones:', err);
+            res.status(500).send('Error interno del servidor');
+            return;
+        }
+        res.json(resultados);
+    });
+});
+
 
 
 // Iniciar el servidor
