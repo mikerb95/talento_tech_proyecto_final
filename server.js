@@ -3,6 +3,15 @@ const express = require('express');
 const mysql = require('mysql2');
 const bodyParser = require('body-parser');
 
+// Inicializamos el módulo Express-session
+const session = require('express-session');
+
+app.use(session({
+    secret: 'tu_clave_secreta',
+    resave: false,
+    saveUninitialized: true
+}));
+
 // Inicializa una instancia de la aplicación Express
 const app = express();
 
@@ -109,7 +118,6 @@ db.query(`
 
 // Ruta de autenticación
 app.post('/index', (req, res) => {
-    //console.log(req.body);
     const { email, contraseña } = req.body;
     const query = 'SELECT * FROM usuarios WHERE email = ? AND contraseña = ?';
     db.query(query, [email, contraseña], (error, results) => {
@@ -121,6 +129,10 @@ app.post('/index', (req, res) => {
         if (results.length > 0) {
             const usuario = results[0];
             const rol_id = usuario.rol_id;
+            
+            // Guardar el ID del usuario en la sesión
+            req.session.userId = usuario.id; 
+            req.session.rolId = rol_id;
 
             if (rol_id === 1) {
                 res.redirect('/admin/admin');
