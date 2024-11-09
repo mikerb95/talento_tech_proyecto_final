@@ -219,6 +219,26 @@ app.delete('/cursos/:id', (req, res) => {
 });
 
 // ---------------Api para manejar la información de los calificaciones y perfil  ----------------------------------
+// Obtener perfil
+app.get('/perfil', (req, res) => {
+    // Verificar si el usuario está logueado
+    if (!req.session.userId) {
+        return res.redirect('/login');
+    }
+
+    // Consultar la información del usuario usando el ID guardado en la sesión
+    const query = 'SELECT * FROM usuarios WHERE id = ?';
+    db.query(query, [req.session.userId], (error, results) => {
+        if (error) {
+            console.error('Error:', error);
+            return res.status(500).send('Error del servidor');
+        }
+        
+        // Renderizar la vista con la información del usuario
+        res.render('perfil', { usuario: results[0] });
+    });
+});
+
 // Obtener todos los calificaciones
 app.get('/calificaciones', (req, res) => {
     db.query('SELECT * FROM calificaciones', (err, results) => {
