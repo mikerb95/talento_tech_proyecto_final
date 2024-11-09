@@ -1,7 +1,7 @@
 /* Estilos generales para los botones "Ver" */
 .curso .card button {
     padding: 12px 24px;
-    background: linear-gradient(45deg, #342e58c7, #69c7cf); /* Gradiente de colores */
+    background: linear-gradient(45deg, #04012cc7, #011c1f); /* Gradiente de colores */
     color: white;
     border: none;
     border-radius: 25px; /* Bordes redondeados */
@@ -14,7 +14,7 @@
 
 /* Efecto al pasar el ratón por encima */
 .curso .card button:hover {
-    background: linear-gradient(45deg, #333067, #393ba5); /* Gradiente invertido al pasar el ratón */
+    background: linear-gradient(45deg, #d47336, #764323); /* Gradiente invertido al pasar el ratón */
     transform: scale(1.05); /* Aumenta ligeramente el tamaño */
 }
 
