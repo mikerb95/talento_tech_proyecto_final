@@ -360,25 +360,7 @@ app.delete('/usuarios/:id', (req, res) => {
     });
 });
 
-// Inicia el servidor y lo hace escuchar en el puerto especificado
-// Muestra en la consola la URL del servidor cuando está corriendo
-app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}`);
-});
-
 //------------------Api de admin------------------
-
-// Configuración de body-parser
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-db.connect(err => {
-    if (err) {
-        console.error('Error conectando a la base de datos:', err.stack);
-        return;
-    }
-    console.log('Conectado a la base de datos MySQL');
-});
 
 // Rutas para manejar la información de los cursos
 
