@@ -1,62 +1,45 @@
-/* Borde negro para los recuadros */
-.border-black {
-    border: 2px solid black !important;
+/* Estilos generales para los botones "Ver" */
+.curso .card button {
+    padding: 12px 24px;
+    background: linear-gradient(45deg, #04012cc7, #011c1f); /* Gradiente de colores */
+    color: white;
+    border: none;
+    border-radius: 25px; /* Bordes redondeados */
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3); /* Sombra para darle profundidad */
+    transition: transform 0.3s ease, background 0.3s ease; /* Transiciones suaves */
 }
 
-/* Estilo para los recuadros */
-.container .border-black {
-    background-color: #f8f9fa; /* Color de fondo claro */
+/* Efecto al pasar el ratón por encima */
+.curso .card button:hover {
+    background: linear-gradient(45deg, #d47336, #764323); /* Gradiente invertido al pasar el ratón */
+    transform: scale(1.05); /* Aumenta ligeramente el tamaño */
+}
+
+/* Efecto al hacer clic */
+.curso .card button:active {
+    transform: scale(0.95); /* Disminuye ligeramente el tamaño al hacer clic */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Reduce la sombra */
+}
+
+/* Estilos adicionales para mejor apariencia */
+.curso .card button:focus {
+    outline: none; /* Elimina el borde de enfoque */
+}
+
+.curso .card {
     padding: 20px;
-    border-radius: 8px; /* Bordes redondeados */
-    transition: transform 0.2s ease-in-out;
+    background: #f9f9f9;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Sombra para las tarjetas */
 }
 
-/* Efecto de sombra y aumento al pasar el cursor */
-.container .border-black:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-/* Estilo para los títulos dentro de los recuadros */
-.border-black h5 {
-    font-size: 1.2rem;
+.curso .card h3 {
+    margin-bottom: 20px;
+    font-size: 18px;
     font-weight: bold;
     color: #333;
-    margin-bottom: 10px;
 }
 
-/* Estilo para el texto descriptivo */
-.border-black p {
-    font-size: 0.9rem;
-    color: #555;
-}
-
-/* Espaciado del botón dentro de los recuadros */
-.border-black .btn {
-    margin-top: 10px;
-}
-
-/* Estilos para el encabezado */
-header {
-    background-color: #f1f1f1;
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-header h1 {
-    font-size: 2rem;
-    color: #333;
-}
-
-header h6 {
-    font-size: 1rem;
-    color: #666;
-}
-
-/* Estilos para el pie de página */
-footer {
-    background-color: #333;
-    color: #fff;
-    font-size: 0.9rem;
-    padding: 15px;
-}
