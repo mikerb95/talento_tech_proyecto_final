@@ -3,8 +3,19 @@ const express = require('express');
 const mysql = require('mysql2');
 const bodyParser = require('body-parser');
 
+// Inicializamos el módulo Express-session
+const session = require('express-session');
+
 // Inicializa una instancia de la aplicación Express
 const app = express();
+
+// Inicializa el middleware express-session
+
+app.use(session({
+    secret: 'tu_clave_secreta',
+    resave: false,
+    saveUninitialized: true
+}));
 
 // Define el puerto en el cual correrá el servidor; usa el puerto definido en las variables de entorno o 3000 como predeterminado
 const PORT = process.env.PORT || 5000;
@@ -109,7 +120,6 @@ db.query(`
 
 // Ruta de autenticación
 app.post('/index', (req, res) => {
-    //console.log(req.body);
     const { email, contraseña } = req.body;
     const query = 'SELECT * FROM usuarios WHERE email = ? AND contraseña = ?';
     db.query(query, [email, contraseña], (error, results) => {
@@ -121,11 +131,15 @@ app.post('/index', (req, res) => {
         if (results.length > 0) {
             const usuario = results[0];
             const rol_id = usuario.rol_id;
+            
+            // Guardar el ID del usuario en la sesión
+            req.session.userId = usuario.id; 
+            req.session.rolId = rol_id;
 
             if (rol_id === 1) {
                 res.redirect('/admin/admin');
             } else if (rol_id === 2) {
-                res.redirect('/usuarios/perfil');
+                res.redirect('/perfil');
             } else {
                 res.status(403).send('Rol no autorizado');
             }
@@ -203,6 +217,27 @@ app.delete('/cursos/:id', (req, res) => {
             return;
         }
         res.send('Curso eliminado');
+    });
+});
+
+// ---------------Api para manejar la información de los calificaciones y perfil  ----------------------------------
+// Obtener perfil
+app.get('/perfil', (req, res) => {
+    // Verificar si el usuario está logueado
+    if (!req.session.userId) {
+        return res.redirect('/login');
+    }
+
+    // Consultar la información del usuario usando el ID guardado en la sesión
+    const query = 'SELECT * FROM usuarios WHERE id = ?';
+    db.query(query, [req.session.userId], (error, results) => {
+        if (error) {
+            console.error('Error:', error);
+            return res.status(500).send('Error del servidor');
+        }
+        
+        // Renderizar la vista con la información del usuario
+        res.render('perfil', { usuario: results[0] });
     });
 });
 
@@ -378,26 +413,26 @@ app.get('/cursos', (req, res) => {
 // Agregar un nuevo curso
 app.post('/cursos', (req, res) => {
     const { nombre_curso, URL_curso, Duracion, Precio, Institucion } = req.body;
-    const sql = 'INSERT INTO cursos (Nombre_curso, URL_curso, Duracion, Precio, Institucion ) VALUES (?, ?, ?, ?, ?)';
-    db.query(sql, [Nombre_curso, URL_curso, Duracion, Valor, Institucion], (err, result) => {
+    const sql = 'INSERT INTO cursos (nombre_curso, URL_curso, Duracion, Precio, Institucion ) VALUES (?, ?, ?, ?, ?)';
+    db.query(sql, [nombre_curso, URL_curso, Duracion, Valor, Institucion], (err, result) => {
         if (err) {
             res.status(500).send('Error agregando el curso');
             return;
         }
-        res.status(201).json({ id: result.insertId, Nombre_curso, URL_curso, Duracion, Precio, Institucion  });
+        res.status(201).json({ id: result.insertId, nombre_curso, URL_curso, Duracion, Precio, Institucion  });
     });
 });
 // Actualizar un curso
 app.put('/cursos/:id', (req, res) => {
-    const { Nombre_curso, URL_curso, Duracion, Valor, Institucion } = req.body;
+    const { nombre_curso, URL_curso, Duracion, Valor, Institucion } = req.body;
     const { id } = req.params;
     const sql = 'UPDATE cursos SET nombre_curso = ?, URL_curso = ?, Duracion = ?, Precio = ?, Institucion = ? WHERE id = ?';
-    db.query(sql, [Nombre_curso, URL_curso, Duracion, Valor, Institucion , id], (err, result) => {
+    db.query(sql, [nombre_curso, URL_curso, Duracion, Valor, Institucion , id], (err, result) => {
         if (err) {
             res.status(500).send('Error actualizando el curso');
             return;
         }
-        res.json({ id, Nombre_curso, URL_curso, Duracion, Valor, Institucion  });
+        res.json({ id, nombre_curso, URL_curso, Duracion, Valor, Institucion  });
     });
 });
 
@@ -413,6 +448,89 @@ app.delete('/cursos/:id', (req, res) => {
         res.send('Curso eliminado');
     });
 });
+
+//pPOST para links de alexis >:v
+
+// Ruta para mostrar los cursos
+app.get('/cursos', (req, res) => {
+    // Recuperar los cursos de la base de datos
+    db.query('SELECT * FROM cursos', (err, resultados) => {
+        if (err) {
+            console.error('Error al recuperar los cursos:', err);
+            res.status(500).send('Error interno del servidor');
+            return;
+        }
+
+        // Renderizar la página de cursos 
+        let html = '<h2>Cursos Disponibles</h2><ul>';
+
+        // Recorrer los cursos y mostrar cada uno con un botón "Ver Más"
+        resultados.forEach(curso => {
+            html += `
+                <li>
+                    <strong>${curso.nombre_curso}</strong> - ${curso.Duracion} 
+                    <form action="/ver-mas" method="POST">
+                        <input type="hidden" name="cursoId" value="${curso.id}">
+                        <button type="submit">Ver Más</button>
+                    </form>
+                </li>
+            `;
+        });
+
+        html += '</ul>';
+        res.send(html);
+    });
+});
+
+// Ruta para manejar el botón "Ver Más" (POST)
+app.post('/ver-mas', (req, res) => {
+    const cursoId = req.body.cursoId;
+
+    // Buscar el curso con el ID dado
+    db.query('SELECT * FROM cursos WHERE id = ?', [cursoId], (err, resultados) => {
+        if (err) {
+            console.error('Error al recuperar el curso:', err);
+            res.status(500).send('Error interno del servidor');
+            return;
+        }
+
+        if (resultados.length === 0) {
+            res.status(404).send('Curso no encontrado');
+            return;
+        }
+
+        const curso = resultados[0];
+        // Redirigir al enlace del curso
+        res.redirect(curso.URL_curso);
+    });
+});
+
+//opiniones y calificaciones
+
+app.get('/cursos', (req, res) => {
+    db.query('SELECT * FROM cursos', (err, resultados) => {
+        if (err) {
+            console.error('Error al recuperar los cursos:', err);
+            res.status(500).send('Error interno del servidor');
+            return;
+        }
+        res.json(resultados);
+    });
+});
+
+app.get('/cursos/:id/calificaciones', (req, res) => {
+    const cursoId = req.params.id;
+    db.query('SELECT * FROM calificaciones WHERE id_curso = ?', [cursoId], (err, resultados) => {
+        if (err) {
+            console.error('Error al recuperar las calificaciones:', err);
+            res.status(500).send('Error interno del servidor');
+            return;
+        }
+        res.json(resultados);
+    });
+});
+
+
 
 // Iniciar el servidor
 app.listen(PORT, () => {
