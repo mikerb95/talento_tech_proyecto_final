@@ -10,6 +10,8 @@
 body{
     font-family: Arial, sans-serif;
     padding: 20px;
+    display: flex;
+    flex-direction: column;
 }
 /* fin de estilos  index.html*/
 
@@ -71,4 +73,15 @@ body{
     height: 34px;
 }
 
+html, body {
+  height: 100%;
+  margin: 0;
+}
 
+main {
+  flex: 1;
+}
+
+footer {
+  margin-top: auto;
+}
