@@ -20,6 +20,8 @@ html, body {
   color: var(--ink);
   font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif;
   line-height: 1.6;
+  margin: 0;
+  padding: 0;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -34,6 +36,7 @@ h1, h2, h3, h4, h5, h6 {
 .site-header .navbar { background: var(--crimson) !important; }
 .site-header .navbar-brand span { letter-spacing: .3px; }
 .site-footer { background: #121417 !important; }
+.site-header, .site-footer { margin: 0; }
 .navbar-dark .navbar-nav .nav-link {
   color: rgba(255,255,255,0.9);
 }

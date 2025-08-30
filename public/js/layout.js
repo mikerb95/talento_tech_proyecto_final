@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
   `;
 
   const footer = document.createElement('footer');
-  footer.className = 'site-footer bg-dark text-white mt-5';
+  footer.className = 'site-footer bg-dark text-white';
   footer.innerHTML = `
     <div class="container py-4">
       <div class="row g-4 align-items-center">
