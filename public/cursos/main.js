@@ -55,15 +55,18 @@ document.addEventListener('DOMContentLoaded', function() {
                             return response.json();
                         })
                         .then(calificaciones => {
-                            const calificacionPromedio = calificaciones.reduce((sum, cal) => sum + cal.Calificacion, 0) / calificaciones.length;
-                            const opiniones = calificaciones.map(cal => `<p>${cal.Detalles}</p>`).join('');
+                            const calificacionPromedio = Math.round(
+                                (calificaciones.reduce((sum, cal) => sum + Number(cal.Calificacion || cal.calificacion || 0), 0) /
+                                (calificaciones.length || 1)) || 0
+                            );
+                            const opiniones = calificaciones.map(cal => `<p>${cal.Detalles ?? cal.detalles ?? ''}</p>`).join('');
 
                             const cursoCard = document.createElement('div');
                             cursoCard.classList.add('col-md-6');
                             cursoCard.innerHTML = `
                                 <div class="curso-izquierda">
                                     <div class="card">
-                                        <img src="${curso.img_url}" alt="Imagen del curso" class="card-img-top">
+                                        <img src="${curso.img_url ?? ''}" alt="Imagen del curso" class="card-img-top">
                                         <div class="card-body">
                                             <div class="calificacion mb-3">
                                                 <h3 class="h5">Calificación</h3>

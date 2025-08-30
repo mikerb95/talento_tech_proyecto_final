@@ -1,0 +1,42 @@
+-- Bootstrap schema for Talentum (idempotent)
+CREATE TABLE IF NOT EXISTS roles (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  rol VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS usuarios (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nombres VARCHAR(255) NOT NULL,
+  apellidos VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  telefono VARCHAR(20) NOT NULL,
+  nickname VARCHAR(255) NOT NULL,
+  `contraseña` VARCHAR(255) NULL,
+  fecha_creacion DATE NOT NULL,
+  rol_id INT NOT NULL,
+  UNIQUE KEY unique_email (email),
+  FOREIGN KEY (rol_id) REFERENCES roles(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS cursos (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nombre_curso VARCHAR(255) NOT NULL,
+  descripcion TEXT NULL,
+  URL_curso VARCHAR(255) NOT NULL,
+  duracion VARCHAR(50) NOT NULL,
+  valor INT NOT NULL,
+  institucion VARCHAR(255) NOT NULL,
+  img_url VARCHAR(255) NULL,
+  acciones VARCHAR(255) NULL
+);
+
+CREATE TABLE IF NOT EXISTS calificaciones (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  id_usuario INT NOT NULL,
+  id_curso INT NOT NULL,
+  calificacion TINYINT NOT NULL CHECK (calificacion BETWEEN 1 AND 10),
+  detalles VARCHAR(255) NOT NULL,
+  fecha DATE NOT NULL,
+  FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (id_curso) REFERENCES cursos(id) ON DELETE CASCADE ON UPDATE CASCADE
+);

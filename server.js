@@ -1,538 +1,442 @@
-// Importa el módulo Express para crear la aplicación web
+// Core and third-party modules
 const express = require('express');
 const mysql = require('mysql2');
-const bodyParser = require('body-parser');
-
-// Inicializamos el módulo Express-session
 const session = require('express-session');
+const path = require('path');
+const bcrypt = require('bcrypt');
+require('dotenv').config();
 
-// Inicializa una instancia de la aplicación Express
+// App init
 const app = express();
-
-// Inicializa el middleware express-session
-
-app.use(session({
-    secret: 'tu_clave_secreta',
-    resave: false,
-    saveUninitialized: true
-}));
-
-// Define el puerto en el cual correrá el servidor; usa el puerto definido en las variables de entorno o 3000 como predeterminado
 const PORT = process.env.PORT || 5000;
 
-// Middleware para parsear el cuerpo de las solicitudes como JSON
+// Middlewares
 app.use(express.json());
-
-// Middleware para servir archivos estáticos desde la carpeta 'public'
-// Los archivos en 'public' serán accesibles directamente desde el navegador
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
-//---------------------------------------------------------------
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || 'change_this_secret',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 2, // 2 hours
+    },
+  })
+);
 
-// Configuración de body-parser
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-// Datos de conexión a la base de datos
+// DB connection
 const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'base_de_datos'
+  host: process.env.DB_HOST || 'localhost',
+  user: process.env.DB_USER || 'root',
+  password: process.env.DB_PASSWORD || '',
+  database: process.env.DB_NAME || 'talentum',
 });
 
-//conectamos con la base de datos
-
-db.connect((error)=> {
-    if(error) {
-        console.error('Error al conectar con la base de datos:', error);
-        return;
-    }
-    console.log('Conectado a la base de datos');
+db.connect((error) => {
+  if (error) {
+    console.error('Error al conectar con la base de datos:', error);
+    return;
+  }
+  console.log('Conectado a la base de datos');
 });
 
-//-------- creacion de tablas   --------------------
-// Crear la tabla 'roles' si no existe
-db.query(`
-    CREATE TABLE IF NOT EXISTS roles (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        rol VARCHAR(255) NOT NULL
-    )
-`, err => {
-    if (err) throw err;
-    console.log("Tabla 'roles' creada o verificada");
-});
+// --- Bootstrap DB (idempotent) ---
+// Nota: Si las tablas ya existen con columnas antiguas, ejecuta src/config/db.sql para alinear el esquema.
+db.query(
+  `CREATE TABLE IF NOT EXISTS roles (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    rol VARCHAR(255) NOT NULL
+  )`,
+  (err) => {
+    if (err) console.error(err);
+    else console.log("Tabla 'roles' creada o verificada");
+  }
+);
 
-// Crear la tabla 'usuarios' si no existe
-db.query(`
-    CREATE TABLE IF NOT EXISTS usuarios (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        nombres VARCHAR(255) NOT NULL,
-        apellidos VARCHAR(255) NOT NULL,
-        email VARCHAR(255) NOT NULL,
-        telefono VARCHAR(20) NOT NULL,
-        nickname VARCHAR(255) NOT NULL,
-        contraseña VARCHAR(255) NULL,
-        fecha_creacion DATE NOT NULL,
-        rol_id INT NOT NULL,
-        FOREIGN KEY (rol_id) REFERENCES roles(id) ON DELETE CASCADE ON UPDATE CASCADE
-    )
-`, err => {
-    if (err) throw err;
-    console.log("Tabla 'usuarios' creada o verificada");
-});
+db.query(
+  `CREATE TABLE IF NOT EXISTS usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombres VARCHAR(255) NOT NULL,
+    apellidos VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    telefono VARCHAR(20) NOT NULL,
+    nickname VARCHAR(255) NOT NULL,
+    \`contraseña\` VARCHAR(255) NULL,
+    fecha_creacion DATE NOT NULL,
+    rol_id INT NOT NULL,
+    UNIQUE KEY unique_email (email),
+    FOREIGN KEY (rol_id) REFERENCES roles(id) ON DELETE CASCADE ON UPDATE CASCADE
+  )`,
+  (err) => {
+    if (err) console.error(err);
+    else console.log("Tabla 'usuarios' creada o verificada");
+  }
+);
 
-// Crear la tabla 'cursos' si no existe
-db.query(`
-    CREATE TABLE IF NOT EXISTS cursos (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        nombre_curso VARCHAR(255) NOT NULL,
-        URL_curso VARCHAR(255) NOT NULL,
-        duracion VARCHAR(50) NOT NULL,
-        valor INT NOT NULL,
-        institucion VARCHAR(255) NOT NULL
-    )
-`, err => {
-    if (err) throw err;
-    console.log("Tabla 'cursos' creada o verificada");
-});
+db.query(
+  `CREATE TABLE IF NOT EXISTS cursos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre_curso VARCHAR(255) NOT NULL,
+    descripcion TEXT NULL,
+    URL_curso VARCHAR(255) NOT NULL,
+    duracion VARCHAR(50) NOT NULL,
+    valor INT NOT NULL,
+    institucion VARCHAR(255) NOT NULL,
+    img_url VARCHAR(255) NULL,
+    acciones VARCHAR(255) NULL
+  )`,
+  (err) => {
+    if (err) console.error(err);
+    else console.log("Tabla 'cursos' creada o verificada");
+  }
+);
 
+db.query(
+  `CREATE TABLE IF NOT EXISTS calificaciones (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NOT NULL,
+    id_curso INT NOT NULL,
+    calificacion TINYINT NOT NULL CHECK (calificacion BETWEEN 1 AND 10),
+    detalles VARCHAR(255) NOT NULL,
+    fecha DATE NOT NULL,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (id_curso) REFERENCES cursos(id) ON DELETE CASCADE ON UPDATE CASCADE
+  )`,
+  (err) => {
+    if (err) console.error(err);
+    else console.log("Tabla 'calificaciones' creada o verificada");
+  }
+);
 
-// Crear la tabla 'calificaciones' si no existe
-db.query(`
-    CREATE TABLE IF NOT EXISTS calificaciones (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        id_usuario INT NOT NULL,
-        id_curso INT NOT NULL,
-        calificacion INT NOT NULL CHECK (calificacion BETWEEN 1 AND 10),
-        detalles VARCHAR(255) NOT NULL,
-        fecha DATE NOT NULL,
-        FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE ON UPDATE CASCADE,
-        FOREIGN KEY (id_curso) REFERENCES cursos(id) ON DELETE CASCADE ON UPDATE CASCADE
-
-    )
-`, err => {
-    if (err) throw err;
-    console.log("Tabla 'calificaciones' creada o verificada");
-});
-
-// ---------------Api para login ----------------------------------
-
-// Ruta de autenticación
+// --- Auth ---
 app.post('/index', (req, res) => {
-    const { email, contraseña } = req.body;
-    const query = 'SELECT * FROM usuarios WHERE email = ? AND contraseña = ?';
-    db.query(query, [email, contraseña], (error, results) => {
-        if (error) {
-            console.error('Error en la consulta:', error);
-            res.status(500).send('Error interno en el servidor');
-            return;
-        }
-        if (results.length > 0) {
-            const usuario = results[0];
-            const rol_id = usuario.rol_id;
-            
-            // Guardar el ID del usuario en la sesión
-            req.session.userId = usuario.id; 
-            req.session.rolId = rol_id;
+  const { email, contraseña } = req.body;
+  if (!email || !contraseña) return res.status(400).send('Faltan credenciales');
 
-            if (rol_id === 1) {
-                res.redirect('/admin/admin');
-            } else if (rol_id === 2) {
-                res.redirect('/perfil');
-            } else {
-                res.status(403).send('Rol no autorizado');
-            }
-        } else {
-            res.status(401).send('Credenciales incorrectas');
-        }
-    });
-});
+  db.query('SELECT * FROM usuarios WHERE email = ?', [email], async (error, results) => {
+    if (error) {
+      console.error('Error en la consulta:', error);
+      return res.status(500).send('Error interno en el servidor');
+    }
+    if (results.length === 0) return res.status(401).send('Credenciales incorrectas');
 
-// ---------------Api para manejar el registro  ----------------------------------
+    const usuario = results[0];
 
-//ruta de registro
-app.post('/registrar', (req, res) => {
-    //console.log(req.body); muestra los datos enviados en consola a traves de un JSON para confirmar valores
-    const { nombres, apellidos, email, telefono, nickname, contraseña, fecha_creacion, rol_id } = req.body;
-    const sql = 'INSERT INTO usuarios (nombres, apellidos, email, telefono, nickname, contraseña, fecha_creacion, rol_id ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-    db.query(sql, [nombres, apellidos, email, telefono, nickname, contraseña, fecha_creacion, rol_id], (err, result) => {
-        if (err) {
-            res.status(500).send('Error al crear usuario');
-            return;
-        }
-        res.redirect('/');
-    });
-});
-
-
-
-// Rutas para manejar la información de los cursos
-
-// Obtener todos los cursos
-app.get('/cursos', (req, res) => {
-    db.query('SELECT * FROM cursos', (err, results) => {
-        if (err) {
-            res.status(500).send('Error obteniendo los cursos');
-            return;
-        }
-        res.json(results);
-    });
-});
-
-// Agregar un nuevo curso
-app.post('/cursos', (req, res) => {
-    const { nombre_curso, URL_curso, Duracion, Precio, Institucion } = req.body;
-    const sql = 'INSERT INTO cursos (nombre_curso, URL_curso, Duracion, Precio, Institucion ) VALUES (?, ?, ?, ?, ?)';
-    db.query(sql, [nombre_curso, URL_curso, Duracion, Precio, Institucion], (err, result) => {
-        if (err) {
-            res.status(500).send('Error agregando el curso');
-            return;
-        }
-        res.status(201).json({ id: result.insertId, nombre_curso, URL_curso, Duracion, Precio, Institucion  });
-    });
-});
-
-// Actualizar un curso
-app.put('/cursos/:id', (req, res) => {
-    const { nombre_curso, URL_curso, Duracion, Precio, Institucion } = req.body;
-    const { id } = req.params;
-    const sql = 'UPDATE cursos SET nombre_curso = ?, URL_curso = ?, Duracion = ?, Precio = ?, Institucion = ? WHERE id = ?';
-    db.query(sql, [nombre_curso, URL_curso, Duracion, Precio, Institucion , id], (err, result) => {
-        if (err) {
-            res.status(500).send('Error actualizando el curso');
-            return;
-        }
-        res.json({ id, nombre_curso, URL_curso, Duracion, Precio, Institucion  });
-    });
-});
-
-// Eliminar un curso
-app.delete('/cursos/:id', (req, res) => {
-    const { id } = req.params;
-    const sql = 'DELETE FROM cursos WHERE id = ?';
-    db.query(sql, [id], (err, result) => {
-        if (err) {
-            res.status(500).send('Error eliminando el curso');
-            return;
-        }
-        res.send('Curso eliminado');
-    });
-});
-
-// ---------------Api para manejar la información de los calificaciones y perfil  ----------------------------------
-// Obtener perfil
-app.get('/perfil', (req, res) => {
-    // Verificar si el usuario está logueado
-    if (!req.session.userId) {
-        return res.redirect('/login');
+    // Soporte legacy: si la columna contraseña contiene hash, usar bcrypt; si no, comparar texto plano
+    let ok = false;
+    try {
+      if (usuario['contraseña']) {
+        // Intentar comparar como hash; si falla por formato, fallback a comparación directa
+        ok = await bcrypt
+          .compare(contraseña, usuario['contraseña'])
+          .catch(() => usuario['contraseña'] === contraseña);
+      }
+    } catch (e) {
+      ok = usuario['contraseña'] === contraseña;
     }
 
-    // Consultar la información del usuario usando el ID guardado en la sesión
-    const query = 'SELECT * FROM usuarios WHERE id = ?';
-    db.query(query, [req.session.userId], (error, results) => {
-        if (error) {
-            console.error('Error:', error);
-            return res.status(500).send('Error del servidor');
-        }
-        
-        // Renderizar la vista con la información del usuario
-        res.render('perfil', { usuario: results[0] });
-    });
+    if (!ok) return res.status(401).send('Credenciales incorrectas');
+
+    req.session.userId = usuario.id;
+    req.session.rolId = usuario.rol_id;
+
+    if (usuario.rol_id === 1) return res.redirect('/admin/admin.html');
+    if (usuario.rol_id === 2) return res.redirect('/usuarios/perfil.html');
+    return res.status(403).send('Rol no autorizado');
+  });
 });
 
-// Obtener todos los calificaciones
-app.get('/calificaciones', (req, res) => {
-    db.query('SELECT * FROM calificaciones', (err, results) => {
-        if (err) {
-            res.status(500).send('Error obteniendo los calificaciones');
-            return;
-        }
-        res.json(results);
+app.post('/registrar', async (req, res) => {
+  const { nombres, apellidos, email, telefono, nickname, contraseña, fecha_creacion, rol_id } = req.body;
+  if (!nombres || !apellidos || !email || !telefono || !nickname || !contraseña || !fecha_creacion || !rol_id) {
+    return res.status(400).send('Datos incompletos');
+  }
+  try {
+    const hashed = await bcrypt.hash(contraseña, 10);
+    const sql = 'INSERT INTO usuarios (nombres, apellidos, email, telefono, nickname, `contraseña`, fecha_creacion, rol_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+    db.query(sql, [nombres, apellidos, email, telefono, nickname, hashed, fecha_creacion, rol_id], (err) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).send('Error al crear usuario');
+      }
+      res.redirect('/');
     });
+  } catch (e) {
+    console.error(e);
+    res.status(500).send('Error al crear usuario');
+  }
 });
 
-// Agregar un nuevo calificaciones
-app.post('/calificaciones', (req, res) => {
-    const { id_Usuario, id_curso, Calificacion, Detalles, Fecha } = req.body;
-    const sql = 'INSERT INTO calificaciones (id_Usuario, id_curso, Calificacion, Detalles, Fecha) VALUES (?, ?, ?, ?, ?)';
-    db.query(sql, [id_Usuario, id_curso, Calificacion, Detalles, Fecha], (err, result) => {
-        if (err) {
-            res.status(500).send('Error agregando el calificaciones');
-            return;
-        }
-        res.status(201).json({ id: result.insertId, id_Usuario, id_curso, Calificacion, Detalles, Fecha  });
-    });
+// --- Perfil ---
+app.get('/perfil', (req, res) => {
+  if (!req.session.userId) return res.redirect('/');
+  res.sendFile(path.join(__dirname, 'public/usuarios/perfil.html'));
 });
 
-// Actualizar un calificaciones
-app.put('/calificaciones/:id', (req, res) => {
-    const { id_Usuario, id_curso, Calificacion, Detalles, Fecha } = req.body;
-    const { id } = req.params;
-    const sql = 'UPDATE calificaciones SET id_Usuario = ?, id_curso = ?, Calificacion = ?, Detalles = ?, Fecha = ? WHERE id = ?';
-    db.query(sql, [id_Usuario, id_curso, Calificacion, Detalles, Fecha , id], (err, result) => {
-        if (err) {
-            res.status(500).send('Error actualizando el calificaciones');
-            return;
-        }
-        res.json({ id_Usuario, id_curso, Calificacion, Detalles, Fecha });
-    });
+app.get('/api/perfil', (req, res) => {
+  if (!req.session.userId) return res.status(401).send('No autenticado');
+  db.query(
+    'SELECT id, nombres, apellidos, email, telefono, nickname, rol_id, fecha_creacion FROM usuarios WHERE id = ?',
+    [req.session.userId],
+    (error, results) => {
+      if (error) return res.status(500).send('Error del servidor');
+      if (!results.length) return res.status(404).send('No encontrado');
+      res.json(results[0]);
+    }
+  );
 });
 
-// Eliminar un calificaciones
-app.delete('/calificaciones/:id', (req, res) => {
-    const { id } = req.params;
-    const sql = 'DELETE FROM calificaciones WHERE id = ?';
-    db.query(sql, [id], (err, result) => {
-        if (err) {
-            res.status(500).send('Error eliminando el calificaciones');
-            return;
-        }
-        res.send('calificaciones eliminado');
-    });
-});
+// --- Cursos CRUD ---
+// Compatibilidad de entrada: acepta tanto camel/uppercase como snake/lowercase
+function parseCursoBody(body) {
+  return {
+    nombre_curso: body.nombre_curso ?? body.Nombre_curso ?? body.Titulo_Curso ?? null,
+    descripcion: body.descripcion ?? body.Descripcion ?? body.descripcion_Curso ?? null,
+    URL_curso: body.URL_curso ?? body.Url_Curso ?? body.url_curso ?? null,
+    duracion: body.duracion ?? body.Duracion ?? body.duracion_Curso ?? null,
+    valor: body.valor ?? body.Valor ?? body.valor_Curso ?? null,
+    institucion: body.institucion ?? body.Institucion ?? null,
+    img_url: body.img_url ?? body.imgUrl ?? null,
+    acciones: body.acciones ?? body.Acciones ?? null,
+  };
+}
 
-// Obtener todos los roles
-app.get('/roles', (req, res) => {
-    db.query('SELECT * FROM roles', (err, results) => {
-        if (err) {
-            res.status(500).send('Error obteniendo los roles');
-            return;
-        }
-        res.json(results);
-    });
-});
-
-// Agregar un nuevo roles
-app.post('/roles', (req, res) => {
-    const { rol } = req.body;
-    const sql = 'INSERT INTO roles (rol) VALUES (?)';
-    db.query(sql, [rol], (err, result) => {
-        if (err) {
-            res.status(500).send('Error agregando el roles');
-            return;
-        }
-        res.status(201).json({ id: result.insertId, rol });
-    });
-});
-
-// Actualizar un roles
-app.put('/roles/:id', (req, res) => {
-    const { rol } = req.body;
-    const { id } = req.params;
-    const sql = 'UPDATE roles SET rol = ? WHERE id = ?';
-    db.query(sql, [rol , id], (err, result) => {
-        if (err) {
-            res.status(500).send('Error actualizando el roles');
-            return;
-        }
-        res.json({ rol });
-    });
-});
-
-// Eliminar un roles
-app.delete('/roles/:id', (req, res) => {
-    const { id } = req.params;
-    const sql = 'DELETE FROM roles WHERE id = ?';
-    db.query(sql, [id], (err, result) => {
-        if (err) {
-            res.status(500).send('Error eliminando el roles');
-            return;
-        }
-        res.send('roles eliminado');
-    });
-});
-
-
-// Obtener todos los usuarios
-app.get('/usuarios', (req, res) => {
-    db.query('SELECT * FROM usuarios', (err, results) => {
-        if (err) {
-            res.status(500).send('Error obteniendo los usuarios');
-            return;
-        }
-        res.json(results);
-    });
-});
-
-// Agregar un nuevo usuarios
-app.post('/usuarios', (req, res) => {
-    const { nombres, apellidos, email, contraseña, telefono, nickname, fecha_creacion, rol_id} = req.body;
-    const sql = 'INSERT INTO usuarios (nombres, apellidos, email, contraseña, telefono, nickname, fecha_creacion, rol_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-    db.query(sql, [nombres, apellidos, email, contraseña, telefono, nickname, fecha_creacion, rol_id], (err, result) => {
-        if (err) {
-            res.status(500).send('Error agregando el usuarios');
-            return;
-        }
-        res.status(201).json({ id: result.insertId, nombres, apellidos, email, contraseña, telefono, nickname, fecha_creacion, rol_id });
-    });
-});
-
-// Actualizar un usuarios
-app.put('/usuarios/:id', (req, res) => {
-    const { nombres, apellidos, email, contraseña, telefono, nickname, fecha_creacion, rol_id } = req.body;
-    const { id } = req.params;
-    const sql = 'UPDATE usuarios SET nombres = ?, apellidos = ?, email = ?, contraseña = ?,telefono = ?, nickname = ?, fecha_creacion = ?, rol_id = ? WHERE id = ?';
-    db.query(sql, [nombres, apellidos, email, contraseña, telefono, nickname, fecha_creacion, rol_id , id], (err, result) => {
-        if (err) {
-            res.status(500).send('Error actualizando el usuarios');
-            return;
-        }
-        res.json({ nombres, apellidos, email, contraseña, telefono, nickname, fecha_creacion, rol_id });
-    });
-});
-
-// Eliminar un usuarios
-app.delete('/usuarios/:id', (req, res) => {
-    const { id } = req.params;
-    const sql = 'DELETE FROM usuarios WHERE id = ?';
-    db.query(sql, [id], (err, result) => {
-        if (err) {
-            res.status(500).send('Error eliminando el usuarios');
-            return;
-        }
-        res.send('usuarios eliminado');
-    });
-});
-
-//------------------Api de admin------------------
-
-// Rutas para manejar la información de los cursos
-
-// Obtener todos los cursos
 app.get('/cursos', (req, res) => {
-    db.query('SELECT * FROM cursos', (err, results) => {
-        if (err) {
-            res.status(500).send('Error obteniendo los cursos');
-            return;
-        }
-        res.json(results);
-    });
+  db.query('SELECT * FROM cursos', (err, results) => {
+    if (err) return res.status(500).send('Error obteniendo los cursos');
+    res.json(results);
+  });
 });
 
-// Agregar un nuevo curso
 app.post('/cursos', (req, res) => {
-    const { nombre_curso, URL_curso, Duracion, Precio, Institucion } = req.body;
-    const sql = 'INSERT INTO cursos (nombre_curso, URL_curso, Duracion, Precio, Institucion ) VALUES (?, ?, ?, ?, ?)';
-    db.query(sql, [nombre_curso, URL_curso, Duracion, Valor, Institucion], (err, result) => {
-        if (err) {
-            res.status(500).send('Error agregando el curso');
-            return;
-        }
-        res.status(201).json({ id: result.insertId, nombre_curso, URL_curso, Duracion, Precio, Institucion  });
-    });
+  const { nombre_curso, descripcion, URL_curso, duracion, valor, institucion, img_url, acciones } = parseCursoBody(req.body);
+  if (!nombre_curso || !URL_curso || !duracion || valor == null || !institucion) {
+    return res.status(400).send('Datos de curso incompletos');
+  }
+  const sql =
+    'INSERT INTO cursos (nombre_curso, descripcion, URL_curso, duracion, valor, institucion, img_url, acciones) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+  db.query(
+    sql,
+    [nombre_curso, descripcion, URL_curso, duracion, valor, institucion, img_url, acciones],
+    (err, result) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).send('Error agregando el curso');
+      }
+      res
+        .status(201)
+        .json({ id: result.insertId, nombre_curso, descripcion, URL_curso, duracion, valor, institucion, img_url, acciones });
+    }
+  );
 });
-// Actualizar un curso
+
 app.put('/cursos/:id', (req, res) => {
-    const { nombre_curso, URL_curso, Duracion, Valor, Institucion } = req.body;
-    const { id } = req.params;
-    const sql = 'UPDATE cursos SET nombre_curso = ?, URL_curso = ?, Duracion = ?, Precio = ?, Institucion = ? WHERE id = ?';
-    db.query(sql, [nombre_curso, URL_curso, Duracion, Valor, Institucion , id], (err, result) => {
-        if (err) {
-            res.status(500).send('Error actualizando el curso');
-            return;
-        }
-        res.json({ id, nombre_curso, URL_curso, Duracion, Valor, Institucion  });
-    });
+  const { id } = req.params;
+  const { nombre_curso, descripcion, URL_curso, duracion, valor, institucion, img_url, acciones } = parseCursoBody(req.body);
+  const sql =
+    'UPDATE cursos SET nombre_curso = ?, descripcion = ?, URL_curso = ?, duracion = ?, valor = ?, institucion = ?, img_url = ?, acciones = ? WHERE id = ?';
+  db.query(
+    sql,
+    [nombre_curso, descripcion, URL_curso, duracion, valor, institucion, img_url, acciones, id],
+    (err) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).send('Error actualizando el curso');
+      }
+      res.json({ id, nombre_curso, descripcion, URL_curso, duracion, valor, institucion, img_url, acciones });
+    }
+  );
 });
 
-// Eliminar un curso
 app.delete('/cursos/:id', (req, res) => {
-    const { id } = req.params;
-    const sql = 'DELETE FROM cursos WHERE id = ?';
-    db.query(sql, [id], (err, result) => {
-        if (err) {
-            res.status(500).send('Error eliminando el curso');
-            return;
-        }
-        res.send('Curso eliminado');
-    });
+  const { id } = req.params;
+  db.query('DELETE FROM cursos WHERE id = ?', [id], (err) => {
+    if (err) return res.status(500).send('Error eliminando el curso');
+    res.sendStatus(204);
+  });
 });
 
-//pPOST para links de alexis >:v
-
-// Ruta para mostrar los cursos
-app.get('/cursos', (req, res) => {
-    // Recuperar los cursos de la base de datos
-    db.query('SELECT * FROM cursos', (err, resultados) => {
-        if (err) {
-            console.error('Error al recuperar los cursos:', err);
-            res.status(500).send('Error interno del servidor');
-            return;
-        }
-
-        // Renderizar la página de cursos 
-        let html = '<h2>Cursos Disponibles</h2><ul>';
-
-        // Recorrer los cursos y mostrar cada uno con un botón "Ver Más"
-        resultados.forEach(curso => {
-            html += `
-                <li>
-                    <strong>${curso.nombre_curso}</strong> - ${curso.Duracion} 
-                    <form action="/ver-mas" method="POST">
-                        <input type="hidden" name="cursoId" value="${curso.id}">
-                        <button type="submit">Ver Más</button>
-                    </form>
-                </li>
-            `;
-        });
-
-        html += '</ul>';
-        res.send(html);
-    });
-});
-
-// Ruta para manejar el botón "Ver Más" (POST)
+// Redirección a URL de curso
 app.post('/ver-mas', (req, res) => {
-    const cursoId = req.body.cursoId;
-
-    // Buscar el curso con el ID dado
-    db.query('SELECT * FROM cursos WHERE id = ?', [cursoId], (err, resultados) => {
-        if (err) {
-            console.error('Error al recuperar el curso:', err);
-            res.status(500).send('Error interno del servidor');
-            return;
-        }
-
-        if (resultados.length === 0) {
-            res.status(404).send('Curso no encontrado');
-            return;
-        }
-
-        const curso = resultados[0];
-        // Redirigir al enlace del curso
-        res.redirect(curso.URL_curso);
-    });
+  const cursoId = req.body.cursoId;
+  db.query('SELECT * FROM cursos WHERE id = ?', [cursoId], (err, resultados) => {
+    if (err) {
+      console.error('Error al recuperar el curso:', err);
+      res.status(500).send('Error interno del servidor');
+      return;
+    }
+    if (!resultados.length) return res.status(404).send('Curso no encontrado');
+    const curso = resultados[0];
+    res.redirect(curso.URL_curso);
+  });
 });
 
-//opiniones y calificaciones
-
-app.get('/cursos', (req, res) => {
-    db.query('SELECT * FROM cursos', (err, resultados) => {
-        if (err) {
-            console.error('Error al recuperar los cursos:', err);
-            res.status(500).send('Error interno del servidor');
-            return;
-        }
-        res.json(resultados);
-    });
+// --- Calificaciones ---
+app.get('/calificaciones', (req, res) => {
+  db.query('SELECT * FROM calificaciones', (err, results) => {
+    if (err) return res.status(500).send('Error obteniendo las calificaciones');
+    res.json(results);
+  });
 });
 
 app.get('/cursos/:id/calificaciones', (req, res) => {
-    const cursoId = req.params.id;
-    db.query('SELECT * FROM calificaciones WHERE id_curso = ?', [cursoId], (err, resultados) => {
-        if (err) {
-            console.error('Error al recuperar las calificaciones:', err);
-            res.status(500).send('Error interno del servidor');
-            return;
-        }
-        res.json(resultados);
-    });
+  const cursoId = req.params.id;
+  // Alias para compatibilidad con frontend existente (Calificacion, Detalles, Fecha)
+  db.query(
+    'SELECT id, id_usuario AS id_Usuario, id_curso, calificacion AS Calificacion, detalles AS Detalles, fecha AS Fecha FROM calificaciones WHERE id_curso = ?',
+    [cursoId],
+    (err, resultados) => {
+      if (err) {
+        console.error('Error al recuperar las calificaciones:', err);
+        res.status(500).send('Error interno del servidor');
+        return;
+      }
+      res.json(resultados);
+    }
+  );
 });
 
+app.post('/calificaciones', (req, res) => {
+  const { id_usuario, id_curso, calificacion, detalles, fecha } = req.body;
+  if (!id_usuario || !id_curso || !calificacion || !detalles || !fecha) {
+    return res.status(400).send('Datos de calificación incompletos');
+  }
+  db.query(
+    'INSERT INTO calificaciones (id_usuario, id_curso, calificacion, detalles, fecha) VALUES (?, ?, ?, ?, ?)',
+    [id_usuario, id_curso, calificacion, detalles, fecha],
+    (err, result) => {
+      if (err) return res.status(500).send('Error agregando la calificación');
+      res.status(201).json({ id: result.insertId, id_usuario, id_curso, calificacion, detalles, fecha });
+    }
+  );
+});
 
+app.put('/calificaciones/:id', (req, res) => {
+  const { id } = req.params;
+  const { id_usuario, id_curso, calificacion, detalles, fecha } = req.body;
+  db.query(
+    'UPDATE calificaciones SET id_usuario = ?, id_curso = ?, calificacion = ?, detalles = ?, fecha = ? WHERE id = ?',
+    [id_usuario, id_curso, calificacion, detalles, fecha, id],
+    (err) => {
+      if (err) return res.status(500).send('Error actualizando la calificación');
+      res.json({ id, id_usuario, id_curso, calificacion, detalles, fecha });
+    }
+  );
+});
 
-// Iniciar el servidor
+app.delete('/calificaciones/:id', (req, res) => {
+  const { id } = req.params;
+  db.query('DELETE FROM calificaciones WHERE id = ?', [id], (err) => {
+    if (err) return res.status(500).send('Error eliminando la calificación');
+    res.sendStatus(204);
+  });
+});
+
+// --- Roles ---
+app.get('/roles', (req, res) => {
+  db.query('SELECT * FROM roles', (err, results) => {
+    if (err) return res.status(500).send('Error obteniendo los roles');
+    res.json(results);
+  });
+});
+
+app.post('/roles', (req, res) => {
+  const { rol } = req.body;
+  if (!rol) return res.status(400).send('Rol requerido');
+  db.query('INSERT INTO roles (rol) VALUES (?)', [rol], (err, result) => {
+    if (err) return res.status(500).send('Error agregando el rol');
+    res.status(201).json({ id: result.insertId, rol });
+  });
+});
+
+app.put('/roles/:id', (req, res) => {
+  const { rol } = req.body;
+  const { id } = req.params;
+  db.query('UPDATE roles SET rol = ? WHERE id = ?', [rol, id], (err) => {
+    if (err) return res.status(500).send('Error actualizando el rol');
+    res.json({ id, rol });
+  });
+});
+
+app.delete('/roles/:id', (req, res) => {
+  const { id } = req.params;
+  db.query('DELETE FROM roles WHERE id = ?', [id], (err) => {
+    if (err) return res.status(500).send('Error eliminando el rol');
+    res.sendStatus(204);
+  });
+});
+
+// --- Usuarios ---
+app.get('/usuarios', (req, res) => {
+  db.query(
+    'SELECT id, nombres, apellidos, email, telefono, nickname, rol_id, fecha_creacion FROM usuarios',
+    (err, results) => {
+      if (err) return res.status(500).send('Error obteniendo los usuarios');
+      res.json(results);
+    }
+  );
+});
+
+app.post('/usuarios', async (req, res) => {
+  const { nombres, apellidos, email, contraseña, telefono, nickname, fecha_creacion, rol_id } = req.body;
+  if (!nombres || !apellidos || !email || !telefono || !nickname || !fecha_creacion || !rol_id) {
+    return res.status(400).send('Datos incompletos');
+  }
+  try {
+    const hashed = contraseña ? await bcrypt.hash(contraseña, 10) : null;
+    const sql =
+      'INSERT INTO usuarios (nombres, apellidos, email, `contraseña`, telefono, nickname, fecha_creacion, rol_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+    db.query(
+      sql,
+      [nombres, apellidos, email, hashed, telefono, nickname, fecha_creacion, rol_id],
+      (err, result) => {
+        if (err) return res.status(500).send('Error agregando el usuario');
+        res.status(201).json({ id: result.insertId, nombres, apellidos, email, telefono, nickname, fecha_creacion, rol_id });
+      }
+    );
+  } catch (e) {
+    console.error(e);
+    res.status(500).send('Error agregando el usuario');
+  }
+});
+
+app.put('/usuarios/:id', async (req, res) => {
+  const { nombres, apellidos, email, contraseña, telefono, nickname, fecha_creacion, rol_id } = req.body;
+  const { id } = req.params;
+  try {
+    let sql, params;
+    if (contraseña) {
+      const hashed = await bcrypt.hash(contraseña, 10);
+      sql =
+        'UPDATE usuarios SET nombres = ?, apellidos = ?, email = ?, `contraseña` = ?, telefono = ?, nickname = ?, fecha_creacion = ?, rol_id = ? WHERE id = ?';
+      params = [nombres, apellidos, email, hashed, telefono, nickname, fecha_creacion, rol_id, id];
+    } else {
+      sql =
+        'UPDATE usuarios SET nombres = ?, apellidos = ?, email = ?, telefono = ?, nickname = ?, fecha_creacion = ?, rol_id = ? WHERE id = ?';
+      params = [nombres, apellidos, email, telefono, nickname, fecha_creacion, rol_id, id];
+    }
+    db.query(sql, params, (err) => {
+      if (err) return res.status(500).send('Error actualizando el usuario');
+      res.json({ id, nombres, apellidos, email, telefono, nickname, fecha_creacion, rol_id });
+    });
+  } catch (e) {
+    console.error(e);
+    res.status(500).send('Error actualizando el usuario');
+  }
+});
+
+app.delete('/usuarios/:id', (req, res) => {
+  const { id } = req.params;
+  db.query('DELETE FROM usuarios WHERE id = ?', [id], (err) => {
+    if (err) return res.status(500).send('Error eliminando el usuario');
+    res.sendStatus(204);
+  });
+});
+
+// --- Start server ---
 app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}`);
+  console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });

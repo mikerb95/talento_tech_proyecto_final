@@ -1,4 +1,4 @@
-const apiUrl = 'http://localhost:5000/cursos'; // Cambiar a la URL de tu backend para cursos
+const apiUrl = 'http://localhost:5000/cursos'; // Backend cursos
 
 document.addEventListener('DOMContentLoaded', () => {
     obtenerCursos();
@@ -28,15 +28,16 @@ function mostrarCursos(cursos) {
     cursos.forEach(curso => {
         const filaCurso = document.createElement('tr');
         filaCurso.innerHTML = `
-            <td>${curso.Nombre_curso}</td>
-            <td>${curso.Descripcion}</td>
-            <td>${curso.URL_curso}</td>
-            <td>${curso.Duracion}</td>
-            <td>${curso.Valor}</td>
-            <td>${curso.Institucion}</td>
-            <td>${curso.Acciones}</td>
+            <td>${curso.nombre_curso ?? ''}</td>
+            <td>${curso.descripcion ?? ''}</td>
+            <td>${curso.URL_curso ?? ''}</td>
+            <td>${curso.duracion ?? ''}</td>
+            <td>${curso.valor ?? ''}</td>
+            <td>${curso.institucion ?? ''}</td>
+            <td>${curso.acciones ?? ''}</td>
             <td class="action-buttons">
-                <button class="edit-btn btn btn-warning btn-sm" onclick="editarCurso(${curso.id}, '${curso.Nombre_curso}', '${curso.Descripcion}', '${curso.URL_curso}', '${curso.Duracion}', ${curso.Valor}, '${curso.Institucion}', '${curso.Acciones}')">Editar</button>
+                <button class="edit-btn btn btn-warning btn-sm" onclick="editarCurso(${curso.id}, '${curso.nombre_curso ?? ''}', '${(curso.descripcion ?? '').replace(/'/g, "&#39;")}', '${curso.URL_curso ?? ''}', '${curso.duracion ?? ''}', ${curso.valor ?? 0}, '${curso.institucion ?? ''}', '${curso.acciones ?? ''}')">Editar</button>
+                <a class="btn btn-info btn-sm" target="_blank" href="${curso.URL_curso ?? '#'}">Abrir</a>
                 <button class="delete-btn btn btn-danger btn-sm" onclick="eliminarCurso(${curso.id})">Eliminar</button>
             </td>
         `;
@@ -46,19 +47,19 @@ function mostrarCursos(cursos) {
 
 // Función para agregar un nuevo curso
 async function agregarCurso() {
-    const Nombre_curso = document.getElementById('Titulo_Curso').value;
-    const Descripcion = document.getElementById('descripcion_Curso').value;
+    const nombre_curso = document.getElementById('Titulo_Curso').value;
+    const descripcion = document.getElementById('descripcion_Curso').value;
     const URL_curso = document.getElementById('Url_Curso').value;
-    const Duracion = document.getElementById('duracion_Curso').value;
-    const Valor = document.getElementById('valor_Curso').value;
-    const Institucion = document.getElementById('institucion').value;
-    const Acciones = document.getElementById('acciones').value;
+    const duracion = document.getElementById('duracion_Curso').value;
+    const valor = document.getElementById('valor_Curso').value;
+    const institucion = document.getElementById('institucion').value;
+    const acciones = document.getElementById('acciones').value;
 
     try {
         const response = await fetch(apiUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ Nombre_curso, Descripcion, URL_curso, Duracion, Valor, Institucion, Acciones })
+            body: JSON.stringify({ nombre_curso, descripcion, URL_curso, duracion, valor, institucion, acciones })
         });
         if (response.ok) {
             obtenerCursos();
@@ -80,31 +81,31 @@ async function eliminarCurso(id) {
 }
 
 // Función para editar un curso
-function editarCurso(id, Nombre_curso, Descripcion, URL_curso, Duracion, Valor, Institucion, Acciones) {
-    document.getElementById('Titulo_Curso').value = Nombre_curso;
-    document.getElementById('descripcion_Curso').value = Descripcion;
+function editarCurso(id, nombre_curso, descripcion, URL_curso, duracion, valor, institucion, acciones) {
+    document.getElementById('Titulo_Curso').value = nombre_curso;
+    document.getElementById('descripcion_Curso').value = descripcion;
     document.getElementById('Url_Curso').value = URL_curso;
-    document.getElementById('duracion_Curso').value = Duracion;
-    document.getElementById('valor_Curso').value = Valor;
-    document.getElementById('institucion').value = Institucion;
-    document.getElementById('acciones').value = Acciones;
+    document.getElementById('duracion_Curso').value = duracion;
+    document.getElementById('valor_Curso').value = valor;
+    document.getElementById('institucion').value = institucion;
+    document.getElementById('acciones').value = acciones;
 
     const botonEnvio = document.querySelector('#formularioCurso button');
     botonEnvio.textContent = 'Actualizar Curso';
     botonEnvio.onclick = async (event) => {
         event.preventDefault();
         try {
-            await fetch(`${apiUrl}/${id}`, {
+        await fetch(`${apiUrl}/${id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    Nombre_curso: document.getElementById('Titulo_Curso').value,
-                    Descripcion: document.getElementById('descripcion_Curso').value,
-                    URL_curso: document.getElementById('Url_Curso').value,
-                    Duracion: document.getElementById('duracion_Curso').value,
-                    Valor: document.getElementById('valor_Curso').value,
-                    Institucion: document.getElementById('institucion').value,
-                    Acciones: document.getElementById('acciones').value
+            nombre_curso: document.getElementById('Titulo_Curso').value,
+            descripcion: document.getElementById('descripcion_Curso').value,
+            URL_curso: document.getElementById('Url_Curso').value,
+            duracion: document.getElementById('duracion_Curso').value,
+            valor: document.getElementById('valor_Curso').value,
+            institucion: document.getElementById('institucion').value,
+            acciones: document.getElementById('acciones').value
                 })
             });
             obtenerCursos();
