@@ -1,7 +1,8 @@
 // Core and third-party modules
 const express = require('express');
 const mysql = require('mysql2');
-const session = require('express-session');
+// Use cookie-session for serverless compatibility
+const cookieSession = require('cookie-session');
 const path = require('path');
 const bcrypt = require('bcrypt');
 require('dotenv').config();
@@ -16,14 +17,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 app.use(
-  session({
-    secret: process.env.SESSION_SECRET || 'change_this_secret',
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 2, // 2 hours
-    },
+  cookieSession({
+    name: 'session',
+    keys: [process.env.SESSION_SECRET || 'change_this_secret'],
+    httpOnly: true,
+    maxAge: 1000 * 60 * 60 * 2, // 2 hours
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production',
   })
 );
 
@@ -187,6 +187,16 @@ app.get('/api/perfil', (req, res) => {
       res.json(results[0]);
     }
   );
+});
+
+// Alias para Vercel: después de reescritura /api/perfil.json -> /perfil.json
+app.get('/perfil.json', (req, res) => {
+  if (!req.session.userId) return res.status(401).send('No autenticado');
+  db.query('SELECT id, nombres, apellidos, email, telefono, nickname, rol_id, fecha_creacion FROM usuarios WHERE id = ?', [req.session.userId], (error, results) => {
+    if (error) return res.status(500).send('Error del servidor');
+    if (!results.length) return res.status(404).send('No encontrado');
+    res.json(results[0]);
+  });
 });
 
 // --- Cursos CRUD ---
@@ -437,6 +447,11 @@ app.delete('/usuarios/:id', (req, res) => {
 });
 
 // --- Start server ---
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
-});
+// Export app for Vercel serverless. If run directly, start server.
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Servidor corriendo en http://localhost:${PORT}`);
+  });
+}
+
+module.exports = app;

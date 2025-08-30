@@ -1,4 +1,4 @@
-const apiUrl = 'http://localhost:5000/cursos'; // Backend cursos
+const apiUrl = '/api/cursos'; // Relative path for Vercel
 
 document.addEventListener('DOMContentLoaded', () => {
     obtenerCursos();

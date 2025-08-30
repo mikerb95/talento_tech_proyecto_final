@@ -1,4 +1,4 @@
-const apiUrl = 'http://localhost:5000/api/perfil';
+const apiUrl = '/api/api/perfil';
 
 document.addEventListener('DOMContentLoaded', () => {
     cargarPerfil();
@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function cargarPerfil() {
     try {
-        const res = await fetch(apiUrl, { credentials: 'include' });
+        const res = await fetch(apiUrl, { credentials: 'same-origin' });
         if (!res.ok) {
             console.error('No autenticado');
             return;

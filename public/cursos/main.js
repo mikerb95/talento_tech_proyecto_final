@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Función para obtener y mostrar los cursos con calificaciones y opiniones
     function obtenerCursos() {
-        fetch('/cursos')
+    fetch('/api/cursos')
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Error en la red');
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(cursos => {
                 cursosContainer.innerHTML = '';
                 cursos.forEach(curso => {
-                    fetch(`/cursos/${curso.id}/calificaciones`)
+                    fetch(`/api/cursos/${curso.id}/calificaciones`)
                         .then(response => {
                             if (!response.ok) {
                                 throw new Error('Error en la red');
