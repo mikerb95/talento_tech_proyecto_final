@@ -1,0 +1,38 @@
+/* Modern auth layout inspired by Outlook/Harvard */
+:root{ --auth-bg: radial-gradient(1200px 600px at -10% -10%, rgba(165,28,48,.12), transparent 50%),
+                 radial-gradient(800px 400px at 110% 10%, rgba(165,28,48,.10), transparent 50%),
+                 linear-gradient(180deg, #fff, #f7f7f9 50%, #f4f6f8 100%); }
+
+.auth-page {
+  min-height: 100vh;
+  background: var(--auth-bg);
+  display: flex;
+  align-items: center;
+}
+
+.auth-card { border: 1px solid #e7e7ec; border-radius: 18px; backdrop-filter: saturate(120%); }
+.hero-pane {
+  background: linear-gradient(135deg, var(--crimson), #7b1525);
+  position: relative;
+  color: #fff;
+}
+.hero-pane::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(600px 300px at 80% 20%, rgba(255,255,255,.15), transparent 60%);
+}
+.hero-pane .logo { filter: drop-shadow(0 4px 12px rgba(0,0,0,.25)); }
+
+.auth-brand { letter-spacing: .3px; }
+.auth-title { font-family: 'Merriweather', Georgia, serif; font-weight: 700; }
+
+.form-floating>.form-control, .form-floating>.form-select { border-radius: 12px; }
+.form-floating label { color: #6b7280; }
+
+.btn-auth { border-radius: 12px; padding:.75rem 1rem; font-weight:600; }
+
+.auth-meta { font-size: .925rem; color: #6b7280; }
+
+@media (max-width: 991.98px) {
+  .auth-card { border-radius: 0.85rem; }
+}
