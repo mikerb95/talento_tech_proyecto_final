@@ -1,0 +1,107 @@
+/* Harvard-inspired theme: Crimson accents, serif headings, clean sans body */
+/* Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:wght@300;400;700&display=swap');
+
+:root {
+  --crimson: #A51C30;
+  --crimson-600: #8e182a;
+  --crimson-700: #7b1525;
+  --ink: #111418;
+  --ink-2: #2a2e34;
+  --paper: #ffffff;
+  --gray-50: #f8f9fb;
+  --gray-100: #f2f3f5;
+  --gray-200: #e6e8eb;
+  --gray-300: #d0d5dd;
+}
+
+html, body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif;
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Merriweather', Georgia, 'Times New Roman', Times, serif;
+  color: var(--ink);
+}
+
+/* Brand header & nav */
+.bg-dark, .navbar-dark, header.bg-dark {
+  background-color: var(--crimson) !important;
+}
+.navbar-dark .navbar-nav .nav-link {
+  color: rgba(255,255,255,0.9);
+}
+.navbar-dark .navbar-nav .nav-link:hover,
+.navbar-dark .navbar-nav .nav-link.active {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+header .lead { opacity: .95; }
+
+/* Buttons */
+.btn-primary {
+  --bs-btn-bg: var(--crimson);
+  --bs-btn-border-color: var(--crimson);
+  --bs-btn-hover-bg: var(--crimson-600);
+  --bs-btn-hover-border-color: var(--crimson-600);
+  --bs-btn-active-bg: var(--crimson-700);
+  --bs-btn-active-border-color: var(--crimson-700);
+}
+.btn-outline-primary {
+  --bs-btn-color: var(--crimson);
+  --bs-btn-border-color: var(--crimson);
+  --bs-btn-hover-bg: var(--crimson);
+  --bs-btn-hover-border-color: var(--crimson);
+}
+
+/* Cards */
+.card {
+  border: 1px solid var(--gray-200);
+  box-shadow: 0 4px 14px rgba(17,20,24,0.06);
+  border-radius: 12px;
+}
+.card .card-header { background: var(--gray-50); }
+
+/* Tables */
+.table thead th { font-weight: 600; }
+.table-dark {
+  --bs-table-bg: var(--crimson);
+  --bs-table-striped-bg: var(--crimson-600);
+  --bs-table-color: #fff;
+}
+
+/* Forms */
+.form-control:focus, .form-select:focus {
+  border-color: var(--crimson-600);
+  box-shadow: 0 0 0 .2rem rgba(165,28,48,0.25);
+}
+label { font-weight: 600; }
+
+/* Page specifics (minimal) */
+.titulo_bienvenida {
+  text-align: center;
+  margin-top: 2rem;
+}
+.inicio, .registro_div {
+  max-width: 520px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #fff;
+  border: 1px solid var(--gray-200);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(17,20,24,0.06);
+}
+.registro a.registrar { color: var(--crimson); font-weight: 600; }
+
+/* Footer */
+footer.bg-dark { background-color: var(--ink-2) !important; }
+footer a { color: #fff; }
+
+/* Utilities */
+.logo { max-height: 56px; width: auto; }
+.bienvenida { letter-spacing: .04em; font-weight: 600; }
