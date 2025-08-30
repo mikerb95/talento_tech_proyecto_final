@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
   header.className = 'site-header';
   header.innerHTML = `
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="box-shadow:none;border:0;">
-      <div class="container-fluid px-3">
+      <div class="container">
         <a class="navbar-brand d-flex align-items-center" href="/">
           <img src="/images/Logo.png" alt="Talentum" class="me-2" style="height:40px;width:auto;" />
           <span class="fw-bold">Talentum</span>
@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const footer = document.createElement('footer');
   footer.className = 'site-footer bg-dark text-white';
   footer.innerHTML = `
-    <div class="container-fluid py-4 px-3">
+    <div class="container py-4">
       <div class="row g-4 align-items-center">
         <div class="col-md-4 d-flex align-items-center">
           <img src="/images/Logo.png" alt="Talentum" style="height:40px;width:auto;" class="me-2" />
