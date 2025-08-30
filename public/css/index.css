@@ -8,10 +8,11 @@
 /* inicio de estilos sección index.html */
 
 body{
-    font-family: Arial, sans-serif;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
+  font-family: Arial, sans-serif;
+  /* Eliminar padding global que creaba bordes alrededor de toda la página */
+  padding: 0;
+  display: flex;
+  flex-direction: column;
 }
 /* fin de estilos  index.html*/
 

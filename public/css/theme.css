@@ -33,10 +33,11 @@ h1, h2, h3, h4, h5, h6 {
 .bg-dark, .navbar-dark, header.bg-dark {
   background-color: var(--crimson) !important;
 }
-.site-header .navbar { background: var(--crimson) !important; }
+.site-header .navbar { background: var(--crimson) !important; border-radius: 0; box-shadow: none; }
 .site-header .navbar-brand span { letter-spacing: .3px; }
 .site-footer { background: #121417 !important; }
-.site-header, .site-footer { margin: 0; }
+.site-header, .site-footer { margin: 0; padding: 0; }
+header.site-header, footer.site-footer { width: 100%; }
 .navbar-dark .navbar-nav .nav-link {
   color: rgba(255,255,255,0.9);
 }
