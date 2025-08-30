@@ -12,61 +12,90 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <!-- css -->
     <link rel="stylesheet" href="css/theme.css">
-    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/auth.css">
 </head>
 <body>
     <script src="/js/layout.js" defer></script>
-    <div class="registro_div">
-        <form class="registrar" method="POST" action="/registrar">
-            <h4 class="titulo_pag">REGISTRARSE</h4>
-            <!-- seccion de nombres -->
-            <div class="mb-3 divInicio">
-                <label for="nombres" class="form-label">Nombres</label>
-                <input type="text" class="form-control" id="nombres" name="nombres" required>
+        <main class="auth-page">
+            <div class="container py-5">
+                <div class="row justify-content-center">
+                    <div class="col-12 col-lg-10">
+                        <div class="row g-0 auth-card overflow-hidden shadow-sm bg-white">
+                            <div class="col-lg-5 hero-pane d-flex flex-column justify-content-between p-4">
+                                <div>
+                                    <a href="/" class="d-inline-flex align-items-center text-white text-decoration-none mb-4 auth-brand">
+                                        <img src="/images/Logo.png" alt="Talentum" class="logo me-2" style="height:48px;width:auto;" />
+                                        <span class="h5 fw-bold m-0">Talentum</span>
+                                    </a>
+                                    <h2 class="auth-title h3">Crea tu cuenta</h2>
+                                    <p class="mb-0 opacity-90">Regístrate para comenzar.</p>
+                                </div>
+                                <div class="small opacity-75">¿Ya tienes cuenta? <a class="text-white fw-semibold" href="/index.html">Inicia sesión</a></div>
+                            </div>
+                            <div class="col-lg-7 p-4 p-lg-5">
+                                <h1 class="h4 mb-4">Registro</h1>
+                                <form class="needs-validation" novalidate method="POST" action="/registrar">
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <div class="form-floating">
+                                                <input type="text" class="form-control" id="nombres" name="nombres" placeholder="Nombres" required>
+                                                <label for="nombres">Nombres</label>
+                                                <div class="invalid-feedback">Ingresa tus nombres.</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-floating">
+                                                <input type="text" class="form-control" id="apellidos" name="apellidos" placeholder="Apellidos" required>
+                                                <label for="apellidos">Apellidos</label>
+                                                <div class="invalid-feedback">Ingresa tus apellidos.</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-floating">
+                                                <input type="email" class="form-control" id="email" name="email" placeholder="nombre@correo.com" required>
+                                                <label for="email">Correo electrónico</label>
+                                                <div class="invalid-feedback">Ingresa un correo válido.</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-floating">
+                                                <input type="tel" class="form-control" id="telefono" name="telefono" placeholder="3000000000" required>
+                                                <label for="telefono">Teléfono</label>
+                                                <div class="invalid-feedback">Ingresa un teléfono válido.</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-floating">
+                                                <input type="text" class="form-control" id="nickname" name="nickname" placeholder="Tu usuario" required>
+                                                <label for="nickname">Nickname</label>
+                                                <div class="invalid-feedback">Elige un nickname.</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-floating">
+                                                <input type="password" class="form-control" id="contraseña" name="contraseña" placeholder="••••••••" required>
+                                                <label for="contraseña">Contraseña</label>
+                                                <div class="invalid-feedback">Crea una contraseña segura.</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <input value="" type="date" class="d-none" id="fecha_creacion" name="fecha_creacion">
+                                    <input value="2" type="number" class="d-none" id="rol_id" name="rol_id">
+                                    <button type="submit" class="btn btn-primary btn-auth w-100 mt-4">Crear cuenta</button>
+                                </form>
+                                <p class="auth-meta mt-4 mb-0">Al registrarte aceptas nuestras políticas y términos.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <!-- seccion de apellidos -->
-            <div class="mb-3 divInicio">
-                <label for="apellidos" class="form-label">Apellidos</label>
-                <input type="text" class="form-control" id="apellidos" name="apellidos" required>
-            </div>
-            <!-- seccion de correo -->
-            <div class="mb-3 divInicio">
-                <label for="email" class="form-label">Correo Electrónico</label>
-                <input type="email" class="form-control" id="email" name="email" required>
-            </div>
-            <!-- seccion de telefono -->
-            <div class="mb-3 divInicio">
-                <label for="telefono" class="form-label">Teléfono</label>
-                <input type="number" class="form-control" id="telefono" name="telefono" required>
-            </div>
-            <!-- seccion de nickname -->
-            <div class="mb-3 divInicio">
-                <label for="nickname" class="form-label">Nickname</label>
-                <input type="text" class="form-control" id="nickname" name="nickname" required>
-            </div>
-            <!-- seccion de contraseña -->
-            <div class="mb-3 divInicio">
-                <label for="contraseña" class="form-label">Contraseña</label>
-                <input type="password" class="form-control" id="contraseña" name="contraseña" required>
-            </div>
-            <!-- seccion de fecha de creacion -->
-            <div class="mb-3 divInicio">
-                <input value="" type="date" class="form-control" id="fecha_creacion" name="fecha_creacion" hidden>
-            </div>
-            <!-- seccion de rol -->
-            <div class="mb-3 divInicio">
-                <input value="2" type="number" class="form-control" id="rol_id" name="rol_id" hidden>
-            </div>
-            <!-- boton -->
-            <button type="submit" class="btn btn-primary botones">Registrarse</button>
-    </div>
-    <script>
-        // Obtener la fecha actual
-        const today = new Date();
-        // Formatear la fecha a "YYYY-MM-DD"
-        const formattedDate = today.toISOString().split('T')[0];
-        // Asignar la fecha formateada al campo de entrada
-        document.getElementById('fecha_creacion').value = formattedDate;
-    </script>
+        </main>
+        <script>
+            const today = new Date();
+            const formattedDate = today.toISOString().split('T')[0];
+            const fecha = document.getElementById('fecha_creacion');
+            if (fecha) fecha.value = formattedDate;
+        </script>
+        <script src="/js/auth.js"></script>
 </body>
 </html>
