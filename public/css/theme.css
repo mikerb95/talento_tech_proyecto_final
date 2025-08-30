@@ -31,6 +31,9 @@ h1, h2, h3, h4, h5, h6 {
 .bg-dark, .navbar-dark, header.bg-dark {
   background-color: var(--crimson) !important;
 }
+.site-header .navbar { background: var(--crimson) !important; }
+.site-header .navbar-brand span { letter-spacing: .3px; }
+.site-footer { background: #121417 !important; }
 .navbar-dark .navbar-nav .nav-link {
   color: rgba(255,255,255,0.9);
 }
