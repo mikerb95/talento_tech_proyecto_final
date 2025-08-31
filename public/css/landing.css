@@ -1,0 +1,20 @@
+/* Landing page styles */
+.hero {
+  background:
+    radial-gradient(800px 400px at 100% -10%, rgba(165,28,48,.15), transparent 60%),
+    linear-gradient(180deg, #fff, #fafbfc 45%, #f6f7f9 100%);
+}
+.hero h1 { font-family: 'Merriweather', Georgia, serif; font-weight: 800; letter-spacing: .2px; }
+.hero .lead { max-width: 56ch; }
+.hero-cta .btn { padding:.9rem 1.2rem; border-radius: 12px; }
+
+.trust-logos img { height: 28px; filter: grayscale(100%); opacity:.7; }
+.benefit { border:1px solid #eceef2; border-radius:16px; padding:1.25rem; background:#fff; }
+
+.course-card { border:1px solid #eceef2; border-radius:16px; box-shadow:0 6px 24px rgba(17,20,24,.06); }
+.course-card .card-img-top { height: 160px; object-fit: cover; }
+
+.testimonial { border:1px solid #eceef2; border-radius:16px; background:#fff; }
+
+.faq details { border:1px solid #eceef2; border-radius:12px; padding:1rem 1.25rem; background:#fff; }
+.faq details+details { margin-top:.75rem; }
