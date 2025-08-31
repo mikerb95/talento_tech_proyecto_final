@@ -12,58 +12,137 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <!-- css -->
     <link rel="stylesheet" href="css/theme.css">
-    <link rel="stylesheet" href="css/auth.css">
+    <link rel="stylesheet" href="css/landing.css">
 </head>
 <body>
     <script src="/js/layout.js" defer></script>
-    <main class="auth-page">
-                <div class="container py-5">
-                    <div class="row justify-content-center">
-                        <div class="col-12 col-lg-10">
-                            <div class="row g-0 auth-card overflow-hidden shadow-sm bg-white">
-                                <!-- Left: brand/hero -->
-                                <div class="col-lg-5 hero-pane d-flex flex-column justify-content-between p-4">
-                                    <div>
-                                        <a href="/" class="d-inline-flex align-items-center text-white text-decoration-none mb-4 auth-brand">
-                                            <img src="/images/Logo.png" alt="Talentum" class="logo me-2" style="height:48px;width:auto;" />
-                                            <span class="h5 fw-bold m-0">Talentum</span>
-                                        </a>
-                                        <h2 class="auth-title h3">Bienvenido</h2>
-                                        <p class="mb-0 opacity-90">Ingresa para continuar tu aprendizaje.</p>
-                                    </div>
-                                    <div class="small opacity-75">¿Aún no tienes cuenta? <a class="text-white fw-semibold" href="/registrar.html">Regístrate</a></div>
-                                </div>
+        <main>
+            <!-- Hero -->
+            <section class="hero py-5">
+                <div class="container py-4">
+                    <div class="row align-items-center g-4">
+                        <div class="col-lg-6">
+                            <h1 class="display-5 mb-3">Aprende habilidades que te contratan</h1>
+                            <p class="lead mb-4">Cursos guiados por expertos, proyectos reales y certificados verificables. Empieza gratis y crece a tu ritmo.</p>
+                            <div class="hero-cta d-flex flex-wrap gap-2">
+                                <a href="/registrar.html" class="btn btn-primary btn-lg">Comenzar gratis</a>
+                                <a href="/cursos/cursos.html" class="btn btn-outline-primary btn-lg">Explorar cursos</a>
+                                <a href="/login.html" class="btn btn-outline-secondary btn-lg">Ingresar</a>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="ratio ratio-16x9 rounded-4 shadow-sm bg-white">
+                                <img src="/images/Logo.png" alt="Talentum" class="p-4" style="object-fit:contain;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-                                <!-- Right: form -->
-                                <div class="col-lg-7 p-4 p-lg-5">
-                                    <h1 class="h4 mb-4">Iniciar sesión</h1>
-                                    <form class="needs-validation" novalidate method="POST" action="/index">
-                                        <div class="form-floating mb-3">
-                                            <input type="email" class="form-control" id="email" name="email" placeholder="nombre@correo.com" required>
-                                            <label for="email">Correo electrónico</label>
-                                            <div class="invalid-feedback">Ingresa un correo válido.</div>
-                                        </div>
-                                        <div class="form-floating mb-3">
-                                            <input type="password" class="form-control" id="contraseña" name="contraseña" placeholder="••••••••" required>
-                                            <label for="contraseña">Contraseña</label>
-                                            <div class="invalid-feedback">La contraseña es obligatoria.</div>
-                                        </div>
-                                        <div class="d-flex justify-content-between align-items-center mb-4">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="1" id="remember">
-                                                <label class="form-check-label" for="remember">Recordarme</label>
-                                            </div>
-                                            <a href="#" class="text-decoration-none">¿Olvidaste tu contraseña?</a>
-                                        </div>
-                                        <button type="submit" class="btn btn-primary btn-auth w-100">Ingresar</button>
-                                    </form>
-                                    <p class="auth-meta mt-4 mb-0">Al continuar aceptas nuestras políticas y términos.</p>
+            <!-- Trust bar -->
+            <section class="py-4">
+                <div class="container text-center trust-logos">
+                    <div class="small text-muted mb-2">Confiado por estudiantes y profesionales</div>
+                    <div class="d-flex flex-wrap justify-content-center gap-4">
+                        <img src="https://dummyimage.com/120x28/cccccc/ffffff&text=Empresa+1" alt="Logo 1">
+                        <img src="https://dummyimage.com/120x28/cccccc/ffffff&text=Empresa+2" alt="Logo 2">
+                        <img src="https://dummyimage.com/120x28/cccccc/ffffff&text=Empresa+3" alt="Logo 3">
+                        <img src="https://dummyimage.com/120x28/cccccc/ffffff&text=Empresa+4" alt="Logo 4">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Benefits -->
+            <section class="py-5">
+                <div class="container">
+                    <div class="row g-3 g-md-4">
+                        <div class="col-md-6 col-lg-3"><div class="benefit h-100"><h5>Mentores expertos</h5><p class="mb-0">Aprende con profesionales en activo y contenido actualizado.</p></div></div>
+                        <div class="col-md-6 col-lg-3"><div class="benefit h-100"><h5>Proyectos reales</h5><p class="mb-0">Construye portafolio con retos prácticos de la industria.</p></div></div>
+                        <div class="col-md-6 col-lg-3"><div class="benefit h-100"><h5>Certificados</h5><p class="mb-0">Logra certificaciones verificables y compartibles.</p></div></div>
+                        <div class="col-md-6 col-lg-3"><div class="benefit h-100"><h5>Flexible</h5><p class="mb-0">Aprende a tu ritmo con rutas guiadas y recursos extra.</p></div></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Featured courses (placeholder) -->
+            <section class="py-5 bg-light">
+                <div class="container">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h3 class="m-0">Cursos destacados</h3>
+                        <a href="/cursos/cursos.html" class="text-decoration-none">Ver todos</a>
+                    </div>
+                    <div class="row g-3 g-md-4">
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card course-card h-100">
+                                <img class="card-img-top" src="https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&w=800&auto=format&fit=crop" alt="Curso 1">
+                                <div class="card-body">
+                                    <h5 class="card-title">Introducción a Programación</h5>
+                                    <p class="card-text small text-muted">Desde cero a tus primeros proyectos. 12h • Principiante</p>
+                                    <a href="/cursos/cursos.html" class="btn btn-outline-primary btn-sm">Ver</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card course-card h-100">
+                                <img class="card-img-top" src="https://images.unsplash.com/photo-1517430816045-df4b7de11d1a?q=80&w=800&auto=format&fit=crop" alt="Curso 2">
+                                <div class="card-body">
+                                    <h5 class="card-title">Frontend con React</h5>
+                                    <p class="card-text small text-muted">Componentes modernos y hooks. 18h • Intermedio</p>
+                                    <a href="/cursos/cursos.html" class="btn btn-outline-primary btn-sm">Ver</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card course-card h-100">
+                                <img class="card-img-top" src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=800&auto=format&fit=crop" alt="Curso 3">
+                                <div class="card-body">
+                                    <h5 class="card-title">Data Science con Python</h5>
+                                    <p class="card-text small text-muted">Análisis, pandas y visualización. 20h • Intermedio</p>
+                                    <a href="/cursos/cursos.html" class="btn btn-outline-primary btn-sm">Ver</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </main>
-    <script src="/js/auth.js"></script>
+            </section>
+
+            <!-- Testimonials + FAQ -->
+            <section class="py-5">
+                <div class="container">
+                    <div class="row g-4">
+                        <div class="col-lg-6">
+                            <div class="testimonial p-4 h-100">
+                                <p class="mb-1">“Conseguí mi primer trabajo como dev a los 3 meses. El enfoque en proyectos marcó la diferencia.”</p>
+                                <div class="small text-muted">María P. • Frontend Developer</div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="faq">
+                                <details open>
+                                    <summary class="fw-semibold">¿Puedo empezar gratis?</summary>
+                                    <div class="mt-2 small text-muted">Sí, accede a contenidos de muestra y evalúa tu ruta.</div>
+                                </details>
+                                <details>
+                                    <summary class="fw-semibold">¿Hay certificados?</summary>
+                                    <div class="mt-2 small text-muted">Sí, emitimos certificados verificables por curso.</div>
+                                </details>
+                                <details>
+                                    <summary class="fw-semibold">¿Necesito experiencia previa?</summary>
+                                    <div class="mt-2 small text-muted">No, tenemos rutas para principiantes y avanzados.</div>
+                                </details>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Final CTA -->
+            <section class="py-5 bg-light">
+                <div class="container text-center">
+                    <h3 class="mb-3">¿Listo para comenzar?</h3>
+                    <a href="/registrar.html" class="btn btn-primary btn-lg">Crear cuenta</a>
+                </div>
+            </section>
+        </main>
 </body>
 </html>

@@ -19,8 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
             <li class="nav-item"><a class="nav-link" href="/admin/admin.html">Admin</a></li>
           </ul>
           <div class="d-flex gap-2">
-            <a href="/registrar.html" class="btn btn-outline-light btn-sm">Registrarse</a>
-            <a href="/index.html" class="btn btn-light btn-sm text-dark">Ingresar</a>
+            <a href="/registrar.html" class="btn btn-outline-light btn-sm">Crear cuenta</a>
+            <a href="/login.html" class="btn btn-light btn-sm text-dark">Ingresar</a>
           </div>
         </div>
       </div>
